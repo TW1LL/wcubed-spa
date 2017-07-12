@@ -1,55 +1,46 @@
 
-import {Product} from '../models';
+import {Category} from '../models';
 
 import { Injectable }              from '@angular/core';
 import {Http, Response}          from '@angular/http';
 import {API} from '../constants';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import 'rxjs/add/operator/toPromise';
-import {Category} from '../models';
+import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 
 
 @Injectable()
-export class ProductService {
-  private url = API.product;  // URL to web API
-  private products: Product[];
+export class CategoryService {
+  private url = API.category;  // URL to web API
+  private categories: Category[] | ErrorObservable;
   constructor (private http: Http) {
-    this.retrieveProducts().then((products) => this.products = products)
+    this.retreiveCategories().then((categories) => {this.categories = categories; })
   }
 
-  public getProducts(category: string = null): Promise<Product[]> {
+  public getCategories(): Promise<Category[]|ErrorObservable> {
     return new Promise((resolve) => {
-      if(this.products) {
-        return resolve(this.filter(category));
+      if(this.categories != null) {
+        return resolve(this.categories);
       } else {
-        this.retrieveProducts().then((product) => {
-          this.products = product;
-
-          resolve(this.filter(category))
-        })
+        return this.retreiveCategories().then((categories) => {console.log(categories);this.categories = categories; resolve(categories) })
       }
-
     })
+
   }
 
-  private filter(category: string) {
-    if (category != null) {
-      return this.products.filter(product => product.category.id ===  +category);
-    }
-  }
 
-  private retrieveProducts(): Promise<Product[]> {
+  private retreiveCategories() {
     return this.http.get(this.url)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
   }
 
-  private extractData = (res: Response): Product[] => {
-     return res.json() || [];
+  private extractData = (res: Response): Category[] => {
+    return res.json() || [];
   }
 
   private handleError (error: Response | any) {
