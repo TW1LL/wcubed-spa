@@ -17,7 +17,6 @@ export class CategoryService {
   private url = API.category;  // URL to web API
   private categories: Category[] | ErrorObservable;
   constructor (private http: Http) {
-    this.retreiveCategories().then((categories) => {this.categories = categories; })
   }
 
   public getCategories(): Promise<Category[]|ErrorObservable> {

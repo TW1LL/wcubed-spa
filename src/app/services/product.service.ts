@@ -17,7 +17,6 @@ export class ProductService {
   private url = API.product;  // URL to web API
   private products: Product[];
   constructor (private http: Http) {
-    this.retrieveProducts().then((products) => this.products = products)
   }
 
   public getProducts(category: string = null): Promise<Product[]> {
@@ -39,6 +38,7 @@ export class ProductService {
     if (category != null) {
       return this.products.filter(product => product.category.id ===  +category);
     }
+    return this.products;
   }
 
   private retrieveProducts(): Promise<Product[]> {
