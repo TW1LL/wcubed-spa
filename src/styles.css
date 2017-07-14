@@ -93,3 +93,13 @@ nav-cart .collection-item, nav-cart ul  {
     display: none !important;
   }
 }
+
+product-details .card-action {
+  display: none;
+}
+product-details markdown ul li {
+  list-style-type: circle !important;
+}
+product-details markdown ul li, product-details markdown ul li ul li{
+  list-style-type: circle !important;
+}

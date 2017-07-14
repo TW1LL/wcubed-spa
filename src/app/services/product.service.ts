@@ -34,6 +34,20 @@ export class ProductService {
     })
   }
 
+  public getProduct(id: number = 0): Promise<Product> {
+    return new Promise((resolve) => {
+      if (this.products) {
+        return resolve(this.products.find(product => product.id === id))
+      } else {
+        this.retrieveProducts().then((product) => {
+          this.products = product;
+
+          resolve(this.products.find(product => product.id === id))
+        })
+      }
+    })
+  }
+
   private filter(category: string) {
     if (category != null) {
       return this.products.filter(product => product.category.id ===  +category);

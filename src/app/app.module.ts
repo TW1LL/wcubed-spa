@@ -27,10 +27,12 @@ import {LoadingService} from './services/loading.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {OrderService} from './services/order.service';
 import {AuthService} from './services/auth.service';
+import {ProductDetailsResolve} from './services/resolves/productdetails.resolve';
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
-  { path: 'product/:category', component: ProductListComponent, resolve: {products: ProductListResolve}},
+  { path: 'product/cat/:category', component: ProductListComponent, resolve: {products: ProductListResolve}},
+  { path: 'product/:id', component: ProductDetailsComponent, resolve: {product: ProductDetailsResolve}},
   { path: 'home', component: WcubedHomeComponent, resolve: {products: ProductListResolve}},
   { path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
     LoadingService,
     CategoryListResolve,
     ProductListResolve,
+    ProductDetailsResolve,
     OrderService,
     AuthService,
   ],

@@ -4,7 +4,7 @@ import {Category} from '../../../models';
 @Component({
   selector: 'category-card',
   template: `
-    <a routerLink="/product/{{category.id}}">
+    <a routerLink="/product/cat/{{category.id}}">
       <mz-card>
           <mz-card-content>
             <div class="img-wrapper">

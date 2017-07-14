@@ -19,7 +19,7 @@ import {OrderService} from '../../../services/order.service';
             </button>
           </div>
           <div class="row">
-            <button mz-button class="col s6 blue-grey lighten-2" routerLink="/product/{{product.category}}/{{product.id}}">View more Info</button>
+            <button mz-button class="col s6 blue-grey lighten-2" routerLink="/product/{{product.id}}">View more Info</button>
             <button mz-button class="col s6 blue-grey darken-2" (click)="addToCart(product)">
               <i mz-icon-mdi
                  [align]="'right'"
