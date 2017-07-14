@@ -33,11 +33,11 @@ app-root {
   flex-direction: column;
 }
 
-loading-wrapper {
+wcubed-app {
   flex: 1 0 auto;
 }
 
-loading-wrapper mz-progress{
+wcubed-app mz-progress{
   position: fixed;
   top: 55px;
   left: 0;
@@ -77,4 +77,19 @@ navbar nav {
 .bgimage {
   background: url("assets/bg.png");
 }
+nav-cart .collection {
+  margin: 0;
+}
 
+nav-cart .collection-item, nav-cart ul  {
+    width: 350px;
+}
+#sidenav-btn {
+  float:left;
+  margin-top:10px;
+}
+@media(min-width: 990px) {
+  #sidenav-btn {
+    display: none !important;
+  }
+}

@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Product} from '../../../models';
-import {TruncatePipe} from '../../../pipes/truncate';
-import {fadeInAnimation} from '../../../pipes/animations';
+import {OrderService} from '../../../services/order.service';
 
 @Component({
   selector: 'product-card',
@@ -20,8 +19,8 @@ import {fadeInAnimation} from '../../../pipes/animations';
             </button>
           </div>
           <div class="row">
-            <button mz-button class="col s6 blue-grey lighten-2" (click) = gotoProduct(product)>View more Info</button>
-            <button mz-button class="col s6 blue-grey darken-2">
+            <button mz-button class="col s6 blue-grey lighten-2" routerLink="/product/{{product.category}}/{{product.id}}">View more Info</button>
+            <button mz-button class="col s6 blue-grey darken-2" (click)="addToCart(product)">
               <i mz-icon-mdi
                  [align]="'right'"
                  [icon]="'cart'"></i>
@@ -56,14 +55,12 @@ import {fadeInAnimation} from '../../../pipes/animations';
     }`,
   ],
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent {
   @Input() product: Product;
-  constructor() { }
 
-  ngOnInit() {}
-
-  gotoProduct(product: Product) {
-    //TODO: Angular Router --> Route to product details page
+  constructor(private orderService: OrderService) {}
+  addToCart(product: Product) {
+    this.orderService.addToCart(product);
   }
 
 }

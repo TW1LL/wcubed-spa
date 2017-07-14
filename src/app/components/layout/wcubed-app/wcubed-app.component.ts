@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LoadingService} from '../../../services/loading.service';
-import {fadeInAnimation, fadeOutAnimation} from '../../../pipes/animations';
 
 @Component({
-  selector: 'loading-wrapper',
+  selector: 'wcubed-app',
   template: `
    
       <mz-progress [ngClass]="loading ? 'loading-show' : 'loading-hidden'"
@@ -17,7 +16,8 @@ import {fadeInAnimation, fadeOutAnimation} from '../../../pipes/animations';
   styles: [],
 
 })
-export class LoadingIndicatorComponent implements OnInit, OnDestroy {
+
+export class WcubedAppComponent implements OnInit, OnDestroy {
   sub: any;
   loading: boolean = true;
   constructor(private loadingService: LoadingService) { }

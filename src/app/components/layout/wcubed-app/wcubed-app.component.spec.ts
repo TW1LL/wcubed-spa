@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoadingIndicatorComponent } from './loading-indicator.component';
+import { WcubedAppComponent } from './wcubed-app.component';
 
-describe('LoadingIndicatorComponent', () => {
-  let component: LoadingIndicatorComponent;
-  let fixture: ComponentFixture<LoadingIndicatorComponent>;
+describe('WcubedAppComponent', () => {
+  let component: WcubedAppComponent;
+  let fixture: ComponentFixture<WcubedAppComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoadingIndicatorComponent ]
+      declarations: [ WcubedAppComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoadingIndicatorComponent);
+    fixture = TestBed.createComponent(WcubedAppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

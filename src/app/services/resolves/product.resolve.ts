@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {ProductService} from './product.service';
-import {Product} from '../models';
-import {LoadingService} from './loading.service';
+import {ProductService} from '../product.service';
+import {Product} from '../../models';
+import {LoadingService} from '../loading.service';
 @Injectable()
 export class ProductListResolve implements Resolve<Product[]> {
   constructor(private productService: ProductService, private loadingService: LoadingService) {

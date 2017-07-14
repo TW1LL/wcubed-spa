@@ -7,26 +7,32 @@ import {fadeInAnimation} from '../../../pipes/animations';
   host: { '[@fadeInAnimation]': '' },
   selector: 'wcubed-home',
   template: `
-    <mz-parallax [height]="500">
-      <div class="container">
+    <mz-parallax [height]="900">
+      <div class="container parallax-section">
         <h1>w3</h1>
       </div>
-      <img src="assets/bg.png">
-    </mz-parallax>
-    <div class="container">
-      <div class="section">
-        <div class="row">
+      <div class="section white">
+        <div class="row container">
           <div class="col s12 m6" *ngFor="let data of sections">
             <wcubed-section [icon]="data.icon" [title]="data.title" [description]="data.description"></wcubed-section>
           </div>
         </div>
       </div>
-    </div>
-    <div class="section bgimage">
-      <product-list [count]="3"></product-list>
-    </div>
+
+      <img src="assets/bg.png">
+      
+    </mz-parallax>
+      <div class="section white">
+        <product-list [count]="3"></product-list>
+      </div>
+
   `,
-  styles: []
+  styles: [`.section {
+    position: relative;
+    z-index: 3;
+  }`, `.parallax-section {
+    height: 300px;
+  }`]
 })
 export class WcubedHomeComponent {
   public sections: IWcubedSection[] = [

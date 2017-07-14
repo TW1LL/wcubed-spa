@@ -9,22 +9,24 @@ import {ProductCardComponent} from './components/cart/product-card/product-card.
 import {MaterializeModule} from 'ng2-materialize';
 import {TruncatePipe} from './pipes/truncate';
 import { AccountDropdownComponent } from './components/account/account-dropdown/account-dropdown.component';
-import { NavCartComponent } from './components/layout/nav-cart/nav-cart.component';
+import { NavCartComponent } from './components/cart/nav-cart/nav-cart.component';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { WCubedSectionComponent } from './components/layout/wcubed-section/wcubed-section.component';
 import { WcubedHomeComponent } from './components/layout/wcubed-home/wcubed-home.component';
 import {CategoryListComponent} from './components/cart/category-list/category-list.component';
 import { CategoryCardComponent } from './components/cart/category-card/category-card.component';
 import {CategoryService} from './services/category.service';
-import {CategoryListResolve} from './services/category.resolve';
-import {ProductListResolve} from './services/product.resolve';
+import {CategoryListResolve} from './services/resolves/category.resolve';
+import {ProductListResolve} from './services/resolves/product.resolve';
 import {RouterModule, Routes} from '@angular/router';
 import {MarkdownModule} from 'angular2-markdown';
 import { ProductDetailsComponent } from './components/cart/product-details/product-details.component';
 import {WcubedFooterComponent} from './components/layout/wcubed-footer/wcubed-footer.component';
-import { LoadingIndicatorComponent } from './components/layout/loading-indicator/loading-indicator.component';
+import { WcubedAppComponent } from './components/layout/wcubed-app/wcubed-app.component';
 import {LoadingService} from './services/loading.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {OrderService} from './services/order.service';
+import {AuthService} from './services/auth.service';
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
@@ -49,6 +51,8 @@ const appRoutes: Routes = [
     LoadingService,
     CategoryListResolve,
     ProductListResolve,
+    OrderService,
+    AuthService,
   ],
   declarations: [
     AppComponent,
@@ -66,7 +70,7 @@ const appRoutes: Routes = [
     CategoryListComponent,
     CategoryCardComponent,
     ProductDetailsComponent,
-    LoadingIndicatorComponent
+    WcubedAppComponent
   ],
   bootstrap: [AppComponent]
 })

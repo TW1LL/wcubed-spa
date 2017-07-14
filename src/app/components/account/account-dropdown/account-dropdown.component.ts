@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
       [constrainWidth]="true"
       [dropdownButtonId]="'btn-dropdown'"
       [gutter]="true"
-      [hover]="true"
+      [hover]="false"
       [inDuration]="300"
       [outDuration]="300"
       [stopPropagation]="true"
