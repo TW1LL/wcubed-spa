@@ -19,7 +19,7 @@ export class OrderService {
     if(duplicate !== -1 && isEquivalent(this.order.items[duplicate].product, product)) {
       this.order.items[duplicate].quantity += 1;
     } else {
-      this.order.items.push(new OrderItem(this.order.items.length, product, quantity, this.order));
+      this.order.items.push(new OrderItem(this.order.items.length, product, quantity));
     }
     this.order.total += product.price * quantity;
     this.cartSub.next(this.order.items);
