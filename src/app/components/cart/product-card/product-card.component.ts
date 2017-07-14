@@ -7,7 +7,12 @@ import {OrderService} from '../../../services/order.service';
   template: `
     <mz-card>
       <mz-card-content>
-        <div class="img-wrapper"><span class="card-title">{{product.name}}</span><img src="assets/images/{{product.thumbnail}}" /></div>
+        <div class="img-wrapper">
+          <a routerLink="/product/{{product.id}}"> 
+            <span class="card-title">{{product.name}}</span>
+            <img src="assets/images/{{product.thumbnail}}" />
+          </a>
+        </div>
         
         <div class="buttons">
           <div class="row">
@@ -47,6 +52,9 @@ import {OrderService} from '../../../services/order.service';
       position: relative;
       min-height:300px;
       transition: min-height 0.5s;
+    }`,
+    `.img-wrapper a {
+      color: #333;
     }`,
     `@media (max-width: 1400px) {
       .img-wrapper {

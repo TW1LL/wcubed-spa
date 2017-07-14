@@ -18,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
       <mz-dropdown-item><a href="#">Register</a></mz-dropdown-item>
       <mz-dropdown-item><a href="#">Login</a></mz-dropdown-item>
     </mz-dropdown>
-    <mz-navbar-item><a id="btn-dropdown" href="#">User <i mz-icon-mdi [align]="'right'" [icon]="'arrow-down-drop-circle-outline'"></i> </a></mz-navbar-item>
+    <mz-navbar-item><a id="btn-dropdown">User <i mz-icon-mdi [align]="'right'" [icon]="'arrow-down-drop-circle-outline'"></i> </a></mz-navbar-item>
   `,
   styles: []
 })
