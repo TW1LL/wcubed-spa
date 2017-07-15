@@ -18,6 +18,9 @@ import {Category} from '../../../models';
   `,
   styles: [`a {
     color: rgba(0, 0, 0, 0.87);;
+  }`, `.img-wrapper {
+    overflow: hidden;
+    max-height: 275px;
   }`]
 })
 export class CategoryCardComponent implements OnInit {

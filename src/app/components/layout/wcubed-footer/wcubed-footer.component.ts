@@ -13,10 +13,11 @@ import { Component, OnInit } from '@angular/core';
           <div class="col l4 offset-l2 s12">
             <h5 class="white-text">Links</h5>
             <ul>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+              <li><a class="grey-text text-lighten-3" routerLink="/home">Home</a></li>
+              <li><a class="grey-text text-lighten-3" routerLink="/product">Products</a></li>
+              <li><a class="grey-text text-lighten-3" routerLink="/about">About</a></li>
+              <li><a class="grey-text text-lighten-3" routerLink="/news">News</a></li>
+              <li><a class="grey-text text-lighten-3" routerLink="/contact">Contact</a></li>
             </ul>
           </div>
         </div>
@@ -24,7 +25,7 @@ import { Component, OnInit } from '@angular/core';
       <div class="footer-copyright">
         <div class="container">
           © 2017 Copyright wcubed
-          <a class="grey-text text-lighten-4 right" href="#!">Admin</a>
+          <a class="grey-text text-lighten-4 right" routerLink="/admin">Admin</a>
         </div>
       </div>
     </footer>

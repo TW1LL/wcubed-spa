@@ -1,20 +1,12 @@
-product-card .card .card-content {
+product-card .card .card-content  {
   padding: 0;
-  min-height: 350px;
-}
-category-card .card .card-content {
-  min-height: 350px;
-}
-@media (max-width: 1400px) {
-  product-card .card .card-content,category-card .card .card-content {
-    min-height: 225px;
-  }
 }
 product-card .card .card-content .card-title {
   position: absolute;
   bottom: 0;
   left: 10px;
   z-index: 2;
+  text-shadow: #80cbc4 2px 1px;
 }
 product-card mz-card-content img, category-card mz-card-content img {
 
@@ -31,6 +23,18 @@ app-root {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+}
+
+
+.flex-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.card-content .flex-wrapper .flex-grow {
+  max-height: 275px;
+}
+.flex-grow {
+  flex: 1 0 auto;
 }
 
 wcubed-app {
