@@ -9,6 +9,18 @@ import {AuthService} from '../../../services/auth.service';
         Register
       </mz-modal-header>
       <mz-modal-content>
+        <div class="errorCard">
+          <mz-card *ngIf="hasError">
+            <mz-card-content>
+              <div class="row">
+              <i mz-icon-mdi [icon]="'alert'" class="col s2"></i>
+              <ul class="col s10">
+                <li *ngFor="let message of errorMessage">{{message}}</li>
+              </ul>
+              </div>
+            </mz-card-content>
+          </mz-card>
+        </div>
           <mz-input-container class="col s12">
             <i mz-icon-mdi mz-input-prefix
                [icon]="'email'">
@@ -73,6 +85,8 @@ export class AccountRegisterComponent extends MzBaseModal {
   email: string = '';
   password: string = '';
   repeatPassword: string = '';
+  hasError: boolean;
+  errorMessage: string[] = [];
   constructor(private authService: AuthService) {
     super();
 
@@ -83,11 +97,27 @@ export class AccountRegisterComponent extends MzBaseModal {
         email: this.email,
         password: this.password,
         repeatPassword: this.repeatPassword
-      }).subscribe((result) => {
-        if (result) {
+      }).subscribe((data) => {
+        if (data.result) {
+          this.hasError = false;
           this.modalComponent.close();
+        } else {
+          this.hasError = true;
+          this.errorMessage = data.message;
         }
       })
+    } else {
+      this.hasError = true;
+      this.errorMessage = [];
+      if (this.email.trim() == "") {
+        this.errorMessage.push('Email must be valid.');
+      }
+      if (this.repeatPassword !== this.password) {
+        this.errorMessage.push('Passwords must match.');
+      }
+      if (this.repeatPassword.length < 4) {
+        this.errorMessage.push('Password must be at least 4 characters');
+      }
     }
   }
 
@@ -99,11 +129,7 @@ export class AccountRegisterComponent extends MzBaseModal {
   }
 
   get validMessage() {
-    return this.valid ? `<i mz-icon-mdi [align]="'left'"
-               [icon]="'check'"></i>
-               Passwords Match` :
-      `<i mz-icon-mdi [align]="'left'"
-               [icon]="'alert'"></i>
-               Passwords Must Match`
+    if(this.email.trim())
+    return this.valid ? '' : 'Registration must be valid.'
   }
 }

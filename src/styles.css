@@ -107,3 +107,22 @@ product-details markdown ul li {
 product-details markdown ul li, product-details markdown ul li ul li{
   list-style-type: circle !important;
 }
+
+.errorCard .card .card-content {
+  border: 2px solid red;
+  padding: 10px;
+}
+.errorCard {
+  padding-bottom: 5px;
+}
+.errorCard .card .card-content i {
+  margin-top: 10px;
+  color: red;
+  text-align: center;
+}
+.errorCard .card .card-content .row {
+  margin-bottom: 0;
+}
+.errorCard .card .card-content .row .col {
+  padding: 0;
+}

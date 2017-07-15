@@ -19,26 +19,22 @@ export class AuthService {
   login(user: any) {
      return this.http.post(this.loginUrl, JSON.stringify(user), {headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
         const data = res.json();
-        if (!data.result) {
-          return false;
-        } else {
+        if (data.result) {
           this.token = data.token;
           this.user = data.user;
-          return true;
         }
+        return data;
       });
   }
 
   register(user) {
     return this.http.post(this.registerUrl, JSON.stringify(user), {headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
       const data = res.json();
-      if (!data.result) {
-        return false;
-      } else {
+      if (data.result) {
         this.token = data.token;
         this.user = data.user;
-        return true;
       }
+      return data;
     });
   }
   logout() {

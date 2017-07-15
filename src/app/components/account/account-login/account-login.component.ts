@@ -11,6 +11,14 @@ import {AuthService} from '../../../services/auth.service';
         Login
       </mz-modal-header>
       <mz-modal-content>
+        <div class="errorCard">
+          <mz-card *ngIf="hasError">
+            <mz-card-content>
+              <i mz-icon-mdi [icon]="'alert'" [align]="'left'"></i>
+              {{errorMessage}}
+            </mz-card-content>
+          </mz-card>
+        </div>
         <mz-input-container class="col s12">
           <i mz-icon-mdi mz-input-prefix
              [icon]="'email'">
@@ -47,14 +55,20 @@ import {AuthService} from '../../../services/auth.service';
 export class AccountLoginComponent extends MzBaseModal {
   email: string;
   pass: string;
+  hasError: boolean;
+  errorMessage: string;
   constructor(private authService: AuthService) {
     super();
 
   }
   login() {
-    this.authService.login({email:this.email, password: this.pass}).subscribe((result) => {
-      if (result) {
+    this.authService.login({email:this.email, password: this.pass}).subscribe((data) => {
+      if (data.result) {
+        this.hasError = false;
         this.modalComponent.close();
+      } else {
+        this.hasError = true;
+        this.errorMessage = data.message;
       }
     })
   }
