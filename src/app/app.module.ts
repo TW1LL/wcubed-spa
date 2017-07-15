@@ -28,6 +28,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {OrderService} from './services/order.service';
 import {AuthService} from './services/auth.service';
 import {ProductDetailsResolve} from './services/resolves/productdetails.resolve';
+import { AccountLoginComponent } from './components/account/account-login/account-login.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AccountRegisterComponent } from './components/account/account-register/account-register.component';
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
@@ -41,6 +44,8 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpModule,
     MaterializeModule.forRoot(),
@@ -56,6 +61,7 @@ const appRoutes: Routes = [
     ProductDetailsResolve,
     OrderService,
     AuthService,
+    AccountLoginComponent
   ],
   declarations: [
     AppComponent,
@@ -73,7 +79,13 @@ const appRoutes: Routes = [
     CategoryListComponent,
     CategoryCardComponent,
     ProductDetailsComponent,
-    WcubedAppComponent
+    WcubedAppComponent,
+    AccountLoginComponent,
+    AccountRegisterComponent
+  ],
+  entryComponents: [
+    AccountLoginComponent,
+    AccountRegisterComponent
   ],
   bootstrap: [AppComponent]
 })

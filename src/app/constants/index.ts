@@ -3,5 +3,7 @@ export const API = {
   product: host + '/product',
   order: host + '/order',
   category: host + '/category',
-  user: host + '/user'
+  user: host + '/user',
+  userLogin: host + '/user/login',
+  userRegister: host + '/user/register'
 };

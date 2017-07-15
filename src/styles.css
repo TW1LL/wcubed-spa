@@ -84,6 +84,10 @@ nav-cart .collection {
 nav-cart .collection-item, nav-cart ul  {
     width: 350px;
 }
+
+.loginModal div.modal {
+  width: 600px;
+}
 #sidenav-btn {
   float:left;
   margin-top:10px;

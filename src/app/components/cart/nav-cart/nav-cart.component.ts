@@ -59,6 +59,9 @@ export class NavCartComponent implements OnInit, AfterViewInit  {
   }
 
   ngAfterViewInit() {
+    $(document).on('click','nav #cart-dropdown', function (e) {
+      e.stopPropagation();
+    })
   }
   getCart() {
     this.orderService.getCart().subscribe(cart => {
