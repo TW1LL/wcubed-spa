@@ -16,16 +16,7 @@ import {MzDropdownComponent} from 'ng2-materialize';
       [stopPropagation]="true"
     >
       <mz-dropdown-item *ngFor="let item of cart">
-        <div class="collection">
-          <mz-collection-item [avatar]="true">
-            <img mz-avatar src="assets/images/{{item.product.thumbnail}}">
-            <div class="title">{{item.product.name}}</div>
-            <div>{{item.product.price | currency:'USD':true}}</div>
-              
-            <div>Quantity: {{item.quantity}} </div>
-            <a mz-secondary-content (click)="removeFromCart(item)"><i mz-icon-mdi [icon]="'delete'"></i></a>
-          </mz-collection-item>
-        </div>
+        <cart-item [item]="item"></cart-item>
         <mz-dropdown-divider></mz-dropdown-divider>
       </mz-dropdown-item>
       <mz-dropdown-item *ngIf="count">

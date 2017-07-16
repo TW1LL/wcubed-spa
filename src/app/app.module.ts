@@ -31,12 +31,23 @@ import {ProductDetailsResolve} from './services/resolves/productdetails.resolve'
 import { AccountLoginComponent } from './components/account/account-login/account-login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AccountRegisterComponent } from './components/account/account-register/account-register.component';
+import { CheckoutAddressComponent } from './components/checkout/checkout-address/checkout-address.component';
+import { WcubedWizardComponent } from './components/checkout/wizard/wizard.component';
+import { CheckoutShipmentComponent } from './components/checkout/checkout-shipment/checkout-shipment.component';
+import { CheckoutConfirmComponent } from './components/checkout/checkout-confirm/checkout-confirm.component';
+import { CheckoutFinalizedComponent } from './components/checkout/checkout-finalized/checkout-finalized.component';
+import { CartItemComponent } from './components/cart/cart-item/cart-item.component';
+import { CheckoutCardComponent } from './components/checkout/checkout-card/checkout-card.component';
+import {OrderResolve} from './services/resolves/order.resolve';
+import {CurrencyPipe} from '@angular/common';
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
   { path: 'product/cat/:category', component: ProductListComponent, resolve: {products: ProductListResolve}},
   { path: 'product/:id', component: ProductDetailsComponent, resolve: {product: ProductDetailsResolve}},
   { path: 'home', component: WcubedHomeComponent, resolve: {products: ProductListResolve}},
+  { path: 'checkout', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
+  { path: 'checkout/:step', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
   { path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 
@@ -59,9 +70,11 @@ const appRoutes: Routes = [
     CategoryListResolve,
     ProductListResolve,
     ProductDetailsResolve,
+    OrderResolve,
     OrderService,
     AuthService,
-    AccountLoginComponent
+    AccountLoginComponent,
+    CurrencyPipe
   ],
   declarations: [
     AppComponent,
@@ -81,7 +94,14 @@ const appRoutes: Routes = [
     ProductDetailsComponent,
     WcubedAppComponent,
     AccountLoginComponent,
-    AccountRegisterComponent
+    AccountRegisterComponent,
+    CheckoutAddressComponent,
+    WcubedWizardComponent,
+    CheckoutShipmentComponent,
+    CheckoutConfirmComponent,
+    CheckoutFinalizedComponent,
+    CartItemComponent,
+    CheckoutCardComponent
   ],
   entryComponents: [
     AccountLoginComponent,

@@ -130,3 +130,37 @@ product-details markdown ul li, product-details markdown ul li ul li{
 .errorCard .card .card-content .row .col {
   padding: 0;
 }
+
+.wizard-nav .card .card-content {
+  padding: 0px;
+}
+.wizard-buttons .card .card-content {
+  padding:5px;
+}
+.wizard-buttons .card .card-content .card-title {
+  display: none;
+}
+.wizard-buttons .card .card-content button {
+  height: 50px;
+}
+.wizard-buttons .card .card-content .row {
+  margin: 0;
+}
+
+.padding-lg {
+  padding: 15px;
+}
+.shipping-rates ul li .collection .collection-item {
+  min-height: 58px;
+}
+.shipping-rates li {
+  background: white;
+}
+
+.shipping-rates ul li .collapsible-body {
+  padding: 10px;
+}
+.shipping-rates label {
+  color: #333;
+}
+

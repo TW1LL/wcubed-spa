@@ -5,5 +5,7 @@ export const API = {
   category: host + '/category',
   user: host + '/user',
   userLogin: host + '/user/login',
-  userRegister: host + '/user/register'
+  userRegister: host + '/user/register',
+  shipmentCreate: host + '/shipment/create',
+  shipmentBuy: host + '/shipment/buy',
 };
