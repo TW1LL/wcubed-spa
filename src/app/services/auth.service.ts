@@ -48,6 +48,10 @@ export class AuthService {
   getUser() {
     return this.user;
   }
+
+  getToken() {
+    return this.token;
+  }
   updateUser(user: User) {
     this.user = user;
   }

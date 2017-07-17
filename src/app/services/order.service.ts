@@ -1,18 +1,17 @@
 import {Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
-import {Product, OrderItem, Order, Address, OrderShipment, Parcel} from '../models';
+import {Product, OrderItem, Order, Address, OrderShipment, Parcel, Payment} from '../models';
 import {API} from '../constants/index';
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {isEquivalent} from '../pipes/utils';
 @Injectable()
 export class OrderService {
-  url = API.order;
+  createUrl = API.orderCreate;
   shipmentCreateUrl = API.shipmentCreate;
   shipmentBuyUrl = API.shipmentBuy;
   private cartSub = new Subject<OrderItem[]>();
   private order: Order = new Order();
-  private shipmentId: string;
   private rates: any;
   constructor(private authService: AuthService, private http: Http) {
     this.order.items = [];
@@ -41,13 +40,25 @@ export class OrderService {
 
   finalize() {
     this.order.user = this.authService.getUser();
-    if (this.order.user != null &&
+    this.order.total = this.getTotal();
+    this.order.items = this.order.items.map((item) => { item.packaging = item.product.prodPackaging; return item; });
+    console.log(this.order);
+    if ((this.order.user != null || this.order.address.email != null )&&
         this.order.address != null &&
         this.order.payment != null &&
         this.order.items.length > 0
     ) {
-      return this.http.post(this.url, this.order)
+      return this.http.post(this.createUrl, JSON.stringify(this.order),{headers: new Headers({'Content-Type': 'application/json'})}).map((order)  => {
+        this.order.id = order.json().id;
+
+        this.purchase();
+      })
     }
+  }
+
+  createPayment(stripeToken: any) {
+    this.order.payment = new Payment();
+    this.order.payment.stripeToken = stripeToken.id;
   }
 
   getOrderPromise() {
@@ -56,26 +67,20 @@ export class OrderService {
   getCart() {
     return this.cartSub;
   }
-  getCartPromise() {
-    return new Promise((resolve) => { resolve(this.order.items)});
-  }
-  getTotal() {
-    return this.order.total;
-  }
 
   getRates() {
-    console.log(this.order.address);
     const data = {
 
       shipments: this.order.items.map((item) => {
-        const parcel = new Parcel(item.product.packaging, item.product.weight);
-        item.product.packaging.weight = +item.product.weight;
+        const parcel = new Parcel(item.product.prodPackaging, item.product.weight);
+        item.product.prodPackaging.weight = +item.product.weight;
         return {
           parcel: parcel,
           toAddress: this.order.address
         }
       })
     };
+
     return this.http.post(this.shipmentCreateUrl, JSON.stringify(data),{headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
       const ships = res.json();
       const shipments = [];
@@ -91,8 +96,31 @@ export class OrderService {
     });
   }
 
+  saveRates(orderShipments: OrderShipment[]) {
+    console.log('saving rates', orderShipments);
+    for (let i = 0; i < orderShipments.length; i++) {
+      this.order.items[i].shipment = orderShipments[i];
+    }
+  }
 
+  getTotal() {
+    let total = 0;
+    // Shipment price + product price
+    this.order.items.forEach((item) => {
+      total += +item.shipment.price;
+      total += +item.product.price * item.quantity;
+    });
+    if (this.order.address && (this.order.address.state === 'NJ' || this.order.address.state === 'New Jersey')) {
+      total += Math.round(total * 0.07 * 100) / 100;
+    }
 
+    return total;
+  }
+
+  purchase() {
+    console.log(this.order);
+
+  }
 
 
 

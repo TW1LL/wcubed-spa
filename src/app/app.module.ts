@@ -40,6 +40,7 @@ import { CartItemComponent } from './components/cart/cart-item/cart-item.compone
 import { CheckoutCardComponent } from './components/checkout/checkout-card/checkout-card.component';
 import {OrderResolve} from './services/resolves/order.resolve';
 import {CurrencyPipe} from '@angular/common';
+import { CheckoutStripeComponent } from './components/checkout/checkout-stripe/checkout-stripe.component';
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
@@ -101,7 +102,8 @@ const appRoutes: Routes = [
     CheckoutConfirmComponent,
     CheckoutFinalizedComponent,
     CartItemComponent,
-    CheckoutCardComponent
+    CheckoutCardComponent,
+    CheckoutStripeComponent,
   ],
   entryComponents: [
     AccountLoginComponent,
