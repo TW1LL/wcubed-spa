@@ -79,7 +79,13 @@ export class CheckoutShipmentComponent implements OnInit {
   saveRates() {
     const orderShipments = [];
     this.shipments.forEach(shipment => {
-      orderShipments.push(new OrderShipment(shipment.shipmentId, shipment.selectedRate, shipment.rates.find(rate => rate.id = shipment.selectedRate).rate))
+      let ship = new OrderShipment(shipment.shipmentId);
+      let rate = shipment.rates.find(rate => rate.id = shipment.selectedRate);
+      ship.rateId = shipment.selectedRate;
+      ship.price = rate.rate;
+      ship.carrier = rate.carrier;
+      ship.service = rate.service;
+      orderShipments.push(ship);
     })
 
     this.orderService.saveRates(orderShipments);

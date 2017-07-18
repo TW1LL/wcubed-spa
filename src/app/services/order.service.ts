@@ -5,14 +5,18 @@ import {API} from '../constants/index';
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {isEquivalent} from '../pipes/utils';
+import {Observable} from 'rxjs/Observable';
+import {_finally} from 'rxjs/operator/finally';
 @Injectable()
 export class OrderService {
   createUrl = API.orderCreate;
   shipmentCreateUrl = API.shipmentCreate;
   shipmentBuyUrl = API.shipmentBuy;
+  purchaseUrl = API.purchase;
   private cartSub = new Subject<OrderItem[]>();
   private order: Order = new Order();
   private rates: any;
+  status: any;
   constructor(private authService: AuthService, private http: Http) {
     this.order.items = [];
     this.cartSub.next([]);
@@ -27,6 +31,7 @@ export class OrderService {
     }
     this.order.total += product.price * quantity;
     this.cartSub.next(this.order.items);
+    this.status = 'created';
   }
 
   removeFromCart(item: OrderItem) {
@@ -36,29 +41,13 @@ export class OrderService {
 
   addAddress(address: Address) {
     this.order.address = address;
-  }
-
-  finalize() {
-    this.order.user = this.authService.getUser();
-    this.order.total = this.getTotal();
-    this.order.items = this.order.items.map((item) => { item.packaging = item.product.prodPackaging; return item; });
-    console.log(this.order);
-    if ((this.order.user != null || this.order.address.email != null )&&
-        this.order.address != null &&
-        this.order.payment != null &&
-        this.order.items.length > 0
-    ) {
-      return this.http.post(this.createUrl, JSON.stringify(this.order),{headers: new Headers({'Content-Type': 'application/json'})}).map((order)  => {
-        this.order.id = order.json().id;
-
-        this.purchase();
-      })
-    }
+    this.status = 'address';
   }
 
   createPayment(stripeToken: any) {
     this.order.payment = new Payment();
     this.order.payment.stripeToken = stripeToken.id;
+    this.order.payment.currency = 'usd';
   }
 
   getOrderPromise() {
@@ -69,23 +58,20 @@ export class OrderService {
   }
 
   getRates() {
-    const data = {
-
-      shipments: this.order.items.map((item) => {
+    const shipments = this.order.items.map((item) => {
         const parcel = new Parcel(item.product.prodPackaging, item.product.weight);
         item.product.prodPackaging.weight = +item.product.weight;
         return {
           parcel: parcel,
           toAddress: this.order.address
         }
-      })
-    };
+      });
 
-    return this.http.post(this.shipmentCreateUrl, JSON.stringify(data),{headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
+    return this.http.post(this.shipmentCreateUrl, JSON.stringify({shipments: shipments}),{headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
       const ships = res.json();
       const shipments = [];
       for (let i = 0; i < ships.length; i++) {
-        this.order.items[i].shipment = new OrderShipment(ships.id);
+        this.order.items[i].shipment = new OrderShipment(ships[i].id);
         shipments.push({
           product: this.order.items[i].product,
           shipmentId: ships[i].id,
@@ -93,19 +79,20 @@ export class OrderService {
         })
       }
       return shipments;
+
     });
   }
 
   saveRates(orderShipments: OrderShipment[]) {
-    console.log('saving rates', orderShipments);
-    for (let i = 0; i < orderShipments.length; i++) {
-      this.order.items[i].shipment = orderShipments[i];
-    }
+    this.order.items = this.order.items.map((item) => {
+      item.shipment = orderShipments.find((ship) => ship.shipmentId == item.shipment.shipmentId);
+      return item;
+    });
+
   }
 
   getTotal() {
     let total = 0;
-    // Shipment price + product price
     this.order.items.forEach((item) => {
       total += +item.shipment.price;
       total += +item.product.price * item.quantity;
@@ -117,11 +104,78 @@ export class OrderService {
     return total;
   }
 
-  purchase() {
-    console.log(this.order);
+  finalize() {
+    const finalizeSub = new Subject<string>();
+    this.saveOrder(finalizeSub)
+      .then(this.purchaseOrder)
+      .then(this.buyShipment)
+      .then((sub) => {
+        this.status = 'finalized';
+        sub.next(this.status);
+      }).catch((err) => {
+        finalizeSub.next(err.message);
+        console.log(err);
+      });
+    return finalizeSub;
 
+  }
+
+  saveOrder = (finalizeSub: Subject<string>) => {
+    if ((this.order.user != null || this.order.address.email != null )&&
+      this.order.address != null &&
+      this.order.payment != null &&
+      this.order.items.length > 0
+    ) {
+      this.order.user = this.authService.getUser();
+      this.order.total = this.getTotal();
+      this.order.items = this.order.items.map((item) => { item.packaging = item.product.prodPackaging; return item; });
+      this.status = 'confirm';
+      finalizeSub.next(this.status);
+      return this.http.post(this.createUrl, JSON.stringify(this.order),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((order)  => {
+        this.order = order.json();
+
+        return finalizeSub;
+      });
+    } else {
+      return new Promise((res, reject) => {
+        reject({message:'Order not complete'});
+      })
+    }
+
+  }
+
+  buyShipment = (finalizeSub: Subject<string>) => {
+    this.status = 'shipping';
+    finalizeSub.next(this.status);
+    const shipments: OrderShipment[] = this.order.items.map((item) => {
+      return item.shipment;
+    });
+    return this.http.post(this.shipmentBuyUrl, JSON.stringify({orderId: this.order.id, shipments: shipments}),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((res) => {
+      this.order = res.json();
+      return finalizeSub;
+    });
+
+  }
+
+  purchaseOrder = (finalizeSub: Subject<string>) => {
+    this.status = 'paying';
+    finalizeSub.next(this.status);
+    return this.http.post(this.purchaseUrl, JSON.stringify({orderId: this.order.id}),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((res) => {
+      this.order = res.json();
+      return finalizeSub;
+    })
   }
 
 
 
+}
+
+export const OrderStatus = {
+  'created': 'Cart created. Awaiting checkout and address.',
+  'address': 'Address saved. Selecting Shipment Method.',
+  'shipment': 'Created Shipment. Confirming and getting card info.',
+  'confirm': 'Card information valid and saved. Saving order.',
+  'shipping' : 'Order saved. Creating shipping label and tracking number.',
+  'paying' : 'Tracking number created. Charging card.',
+  'finalized': 'Order confirmed. Confirmation number generated.'
 }

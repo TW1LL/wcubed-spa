@@ -9,4 +9,5 @@ export const API = {
   userRegister: host + '/user/register',
   shipmentCreate: host + '/shipment/create',
   shipmentBuy: host + '/shipment/buy',
+  purchase: host + '/payment/purchase'
 };
