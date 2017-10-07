@@ -1,12 +1,14 @@
-import {testEnvironment} from '../../environments/environment'
-import {prodEnvironment} from '../../environments/environment.prod.ts'
+import * as testEnvironment from '../../environments/environment'
+import * as prodEnvironment from '../../environments/environment.prod.ts'
 import { isDevMode } from '@angular/core';
 
+let environment;
+
 if ( isDevMode() ) {
-  environment = testEnvironment
+  environment = testEnvironment.environment;
 }
 else {
-  environment = prodEnvironment
+  environment = prodEnvironment.environment;
 }
 
 export const API = {
