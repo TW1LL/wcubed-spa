@@ -67,7 +67,7 @@ export class OrderService {
         }
       });
 
-    return this.http.post(this.shipmentCreateUrl, JSON.stringify({shipments: shipments}),{headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
+    return this.http.post(this.shipmentCreateUrl, JSON.stringify({shipments: shipments}),{headers: new Headers(this.headers)}).map((res) => {
       const ships = res.json();
       const shipments = [];
       for (let i = 0; i < ships.length; i++) {
@@ -121,17 +121,20 @@ export class OrderService {
   }
 
   saveOrder = (finalizeSub: Subject<string>) => {
+    if (this.authService.isLoggedIn()) {
+      this.order.user = this.authService.getUser();
+      this.order.address.email = this.order.user.email;
+    }
     if ((this.order.user != null || this.order.address.email != null )&&
       this.order.address != null &&
       this.order.payment != null &&
       this.order.items.length > 0
     ) {
-      this.order.user = this.authService.getUser();
       this.order.total = this.getTotal();
       this.order.items = this.order.items.map((item) => { item.packaging = item.product.prodPackaging; return item; });
       this.status = 'confirm';
       finalizeSub.next(this.status);
-      return this.http.post(this.createUrl, JSON.stringify(this.order),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((order)  => {
+      return this.http.post(this.createUrl, JSON.stringify(this.order),{headers: new Headers(this.headers)}).toPromise().then((order)  => {
         this.order = order.json();
 
         return finalizeSub;
@@ -150,7 +153,7 @@ export class OrderService {
     const shipments: OrderShipment[] = this.order.items.map((item) => {
       return item.shipment;
     });
-    return this.http.post(this.shipmentBuyUrl, JSON.stringify({orderId: this.order.id, shipments: shipments}),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((res) => {
+    return this.http.post(this.shipmentBuyUrl, JSON.stringify({orderId: this.order.id, shipments: shipments}),{headers: new Headers(this.headers)}).toPromise().then((res) => {
       this.order = res.json();
       return finalizeSub;
     });
@@ -160,22 +163,16 @@ export class OrderService {
   purchaseOrder = (finalizeSub: Subject<string>) => {
     this.status = 'paying';
     finalizeSub.next(this.status);
-    return this.http.post(this.purchaseUrl, JSON.stringify({orderId: this.order.id}),{headers: new Headers({'Content-Type': 'application/json'})}).toPromise().then((res) => {
+    return this.http.post(this.purchaseUrl, JSON.stringify({orderId: this.order.id}),{headers:new Headers(this.headers)}).toPromise().then((res) => {
       this.order = res.json();
       return finalizeSub;
     })
   }
 
+  get headers() {
+    return  this.authService.isLoggedIn() ? {'Content-Type': 'application/json', 'token': this.authService.getToken()} : {'Content-Type': 'application/json'};
+  }
 
 
 }
 
-export const OrderStatus = {
-  'created': 'Cart created. Awaiting checkout and address.',
-  'address': 'Address saved. Selecting Shipment Method.',
-  'shipment': 'Created Shipment. Confirming and getting card info.',
-  'confirm': 'Card information valid and saved. Saving order.',
-  'shipping' : 'Order saved. Creating shipping label and tracking number.',
-  'paying' : 'Tracking number created. Charging card.',
-  'finalized': 'Order confirmed. Confirmation number generated.'
-}

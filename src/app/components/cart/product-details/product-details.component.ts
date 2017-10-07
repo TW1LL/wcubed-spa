@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Product} from '../../../models';
+import {OrderService} from '../../../services/order.service';
 
 @Component({
   selector: 'product-details',
@@ -56,7 +57,7 @@ import {Product} from '../../../models';
 export class ProductDetailsComponent implements OnInit {
   product: Product;
   currentImage: string
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private orderService: OrderService) { }
 
   ngOnInit() {
     this.product = this.route.snapshot.data['product'];
@@ -66,5 +67,9 @@ export class ProductDetailsComponent implements OnInit {
 
   changeImage(image: string) {
     this.currentImage = image;
+  }
+
+  addToCart() {
+    this.orderService.addToCart(this.product);
   }
 }

@@ -26,7 +26,7 @@ import {OrderService} from '../../../services/order.service';
             </div>
             <div class="row">
               <button mz-button class="col s6 blue-grey lighten-2" routerLink="/product/{{product.id}}">View more Info</button>
-              <button mz-button class="col s6 blue-grey darken-2" (click)="addToCart(product)">
+              <button mz-button class="col s6 blue-grey darken-2" (click)="addToCart()">
                 <i mz-icon-mdi
                    [align]="'right'"
                    [icon]="'cart'"></i>
@@ -65,8 +65,9 @@ export class ProductCardComponent {
   @Input() product: Product;
 
   constructor(private orderService: OrderService) {}
-  addToCart(product: Product) {
-    this.orderService.addToCart(product);
+
+  addToCart() {
+    this.orderService.addToCart(this.product);
   }
 
 }
