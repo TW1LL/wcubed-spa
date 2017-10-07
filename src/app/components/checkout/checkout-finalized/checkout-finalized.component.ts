@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
-import {OrderService, OrderStatus} from '../../../services/order.service';
+import {OrderService} from '../../../services/order.service';
+import {OrderStatus, OrderColor} from '../../../constants/index';
 
 @Component({
   selector: 'checkout-finalized',
@@ -7,12 +8,17 @@ import {OrderService, OrderStatus} from '../../../services/order.service';
     <mz-card [backgroundClass]="'blue-grey'">
       <mz-card-title>{{title}}</mz-card-title>
       <mz-card-content>
-        <div class="finalize-indicator row valign-wrapper">
+        <div class="finalize-indicator row center-align">
           <mz-spinner *ngIf="status != 'finalized'"
             [color]="color"
-            [size]="'big'" class="col s12 valign">
+            [size]="'big'" class="col s12">
           </mz-spinner>
-          <div class="col s12 center-align valign">
+          <i *ngIf="status == 'finalized'" 
+             mz-icon-mdi 
+             [icon]="'checkbox-marked-circle'" 
+             [size]="'48px'">
+          </i>
+          <div class="col s12 white-text">
             {{getStatus()}}
           </div>
         </div>
@@ -33,7 +39,7 @@ export class CheckoutFinalizedComponent implements OnInit {
     this.orderService.finalize().subscribe((status) => {
       console.log(this.status);
         this.status = status;
-        this.color = Color[status];
+        this.color = OrderColor[status];
         if (status == 'finalized') {
           this.title = 'Order Confirmed!';
         }
@@ -49,13 +55,4 @@ export class CheckoutFinalizedComponent implements OnInit {
 
 }
 
-const Color = {
-  'created': 'blue-grey lighten-3',
-  'address': 'blue-grey lighten-2',
-  'shipment': 'blue-grey lighten-1',
-  'confirm': 'white',
-  'shipping' : 'grey',
-  'paying' : 'yellow',
-  'finalized': 'green'
-}
 
