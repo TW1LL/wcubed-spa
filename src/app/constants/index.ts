@@ -1,5 +1,5 @@
-import * as testEnvironment from '../../environments/environment'
-import * as prodEnvironment from '../../environments/environment.prod.ts'
+import * as testEnvironment from '../../environments/environment';
+import * as prodEnvironment from '../../environments/environment.prod';
 import { isDevMode } from '@angular/core';
 
 let environment;
