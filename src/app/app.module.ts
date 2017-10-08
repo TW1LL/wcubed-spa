@@ -41,6 +41,8 @@ import { CheckoutCardComponent } from './components/checkout/checkout-card/check
 import {OrderResolve} from './services/resolves/order.resolve';
 import {CurrencyPipe} from '@angular/common';
 import { CheckoutStripeComponent } from './components/checkout/checkout-stripe/checkout-stripe.component';
+import { AccountPageComponent } from './components/account/account-page/account-page.component';
+import {UserResolve} from "./services/resolves/user.resolve";
 
 const appRoutes: Routes = [
   { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
@@ -49,7 +51,8 @@ const appRoutes: Routes = [
   { path: 'home', component: WcubedHomeComponent, resolve: {products: ProductListResolve}},
   { path: 'checkout', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
   { path: 'checkout/:step', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
-  { path: '', redirectTo: '/home', pathMatch: 'full'}
+  { path: '', redirectTo: '/home', pathMatch: 'full'},
+  { path: 'user/account', component: AccountPageComponent, resolve: {user: UserResolve}}
 ];
 
 
@@ -72,6 +75,7 @@ const appRoutes: Routes = [
     ProductListResolve,
     ProductDetailsResolve,
     OrderResolve,
+    UserResolve,
     OrderService,
     AuthService,
     AccountLoginComponent,
@@ -104,6 +108,7 @@ const appRoutes: Routes = [
     CartItemComponent,
     CheckoutCardComponent,
     CheckoutStripeComponent,
+    AccountPageComponent,
   ],
   entryComponents: [
     AccountLoginComponent,

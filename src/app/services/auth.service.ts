@@ -45,6 +45,12 @@ export class AuthService {
     return this.user != null;
   }
 
+  getUserPromise(){
+    return new Promise((resolve, reject) => {
+      resolve(this.user);
+    });
+  }
+
   getUser() {
     return this.user;
   }
