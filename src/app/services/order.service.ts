@@ -5,8 +5,6 @@ import {API} from '../constants/index';
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {isEquivalent} from '../pipes/utils';
-import {Observable} from 'rxjs/Observable';
-import {_finally} from 'rxjs/operator/finally';
 @Injectable()
 export class OrderService {
   createUrl = API.orderCreate;

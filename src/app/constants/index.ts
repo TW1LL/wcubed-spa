@@ -21,7 +21,8 @@ export const API = {
   userRegister: environment.host + '/user/register',
   shipmentCreate: environment.host + '/shipment/create',
   shipmentBuy: environment.host + '/shipment/buy',
-  purchase: environment.host + '/payment/purchase'
+  purchase: environment.host + '/payment/purchase',
+  checkRank: environment.host + '/user/check-rank'
 };
 
 export const OrderStatus = {

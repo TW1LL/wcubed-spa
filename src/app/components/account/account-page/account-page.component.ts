@@ -18,14 +18,7 @@ import {ActivatedRoute} from "@angular/router";
                         </div>
                     </mz-card-content>
                 </mz-card>
-                
-                <div class="card blue-grey darken-1">
-                    <div class="card-content">
-                        <mz-card-title>Recent Orders</mz-card-title>
-                        <div class="row">
-                        </div>
-                    </div>
-                </div>
+
             
                 <div class="card blue-grey darken-1">
                     <div class="card-content">

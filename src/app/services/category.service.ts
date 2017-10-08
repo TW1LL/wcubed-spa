@@ -20,13 +20,13 @@ export class CategoryService {
   }
 
   public getCategories(): Promise<Category[]|ErrorObservable> {
-    return new Promise((resolve) => {
-      if(this.categories != null) {
-        return resolve(this.categories);
-      } else {
-        return this.retreiveCategories().then((categories) => {console.log(categories);this.categories = categories; resolve(categories) })
-      }
-    })
+      return new Promise((resolve) => {
+        if(this.categories != null) {
+          return resolve(this.categories);
+        } else {
+          return this.retreiveCategories().then((categories) => {console.log(categories);this.categories = categories; resolve(categories) })
+        }
+      })
 
   }
 

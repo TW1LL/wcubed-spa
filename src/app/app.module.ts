@@ -29,6 +29,7 @@ import {OrderService} from './services/order.service';
 import {AuthService} from './services/auth.service';
 import {ProductDetailsResolve} from './services/resolves/productdetails.resolve';
 import { AccountLoginComponent } from './components/account/account-login/account-login.component';
+import { AccountPageComponent} from './components/account/account-page/account-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AccountRegisterComponent } from './components/account/account-register/account-register.component';
 import { CheckoutAddressComponent } from './components/checkout/checkout-address/checkout-address.component';
@@ -41,19 +42,12 @@ import { CheckoutCardComponent } from './components/checkout/checkout-card/check
 import {OrderResolve} from './services/resolves/order.resolve';
 import {CurrencyPipe} from '@angular/common';
 import { CheckoutStripeComponent } from './components/checkout/checkout-stripe/checkout-stripe.component';
-import { AccountPageComponent } from './components/account/account-page/account-page.component';
-import {UserResolve} from "./services/resolves/user.resolve";
+import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
+import {appRoutes} from './app.routes';
+import {AdminResolve} from './services/resolves/admin.resolve';
+import {AdminService} from './services/admin.service';
+import {UserResolve} from './services/resolves/user.resolve';
 
-const appRoutes: Routes = [
-  { path: 'product', component: CategoryListComponent, resolve: {categories: CategoryListResolve}},
-  { path: 'product/cat/:category', component: ProductListComponent, resolve: {products: ProductListResolve}},
-  { path: 'product/:id', component: ProductDetailsComponent, resolve: {product: ProductDetailsResolve}},
-  { path: 'home', component: WcubedHomeComponent, resolve: {products: ProductListResolve}},
-  { path: 'checkout', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
-  { path: 'checkout/:step', component: WcubedWizardComponent, resolve: {order: OrderResolve}},
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  { path: 'user/account', component: AccountPageComponent, resolve: {user: UserResolve}}
-];
 
 
 @NgModule({
@@ -71,9 +65,11 @@ const appRoutes: Routes = [
     ProductService,
     CategoryService,
     LoadingService,
+    AdminService,
     CategoryListResolve,
     ProductListResolve,
     ProductDetailsResolve,
+    AdminResolve,
     OrderResolve,
     UserResolve,
     OrderService,
@@ -108,7 +104,8 @@ const appRoutes: Routes = [
     CartItemComponent,
     CheckoutCardComponent,
     CheckoutStripeComponent,
-    AccountPageComponent,
+    AdminPageComponent,
+    AccountPageComponent
   ],
   entryComponents: [
     AccountLoginComponent,
