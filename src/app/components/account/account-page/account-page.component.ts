@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {User} from "../../../models";
 import {OrderService} from "../../../services/order.service";
 import {ActivatedRoute} from "@angular/router";
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-account-page',
@@ -24,15 +25,15 @@ import {ActivatedRoute} from "@angular/router";
                     <div class="card-content">
                         <span class="card-title">Recent Orders</span>
                         <div class="row">
-                            <div class="col m6 s12" *ngFor="let order of user.orders">
-                                <div class="card-panel">
-                                    <a href="/order/{{order.id}}">
-                                    <img src="{{ order.image }}" class="responsive-img" />
-                                    <p>Total: $ {{order.total}}</p>
-                                    <p>Ordered {{order.created}}</p>
-                                    </a>
-                                </div>
-                            </div>
+                            <!--<div class="col m6 s12" *ngFor="let order of user.orders">-->
+                                <!--<div class="card-panel">-->
+                                    <!--<a href="/order/{{order.id}}">-->
+                                    <!--<img src="{{ order.image }}" class="responsive-img" />-->
+                                    <!--<p>Total: $ {{order.total}}</p>-->
+                                    <!--<p>Ordered {{order.created}}</p>-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -55,14 +56,22 @@ import {ActivatedRoute} from "@angular/router";
 })
 
 export class AccountPageComponent implements OnInit {
-
+  page: string;
   user: User;
 
 
-  constructor(private route: ActivatedRoute, private orderService: OrderService) { }
+  constructor(private route: ActivatedRoute, private orderService: OrderService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.user = this.route.snapshot.data['user'];
+    this.page = this.route.snapshot.data['page'].subscribe(page => this.page = page);
+    let user = this.authService.getUser();
+    console.log(user);
+    if (user) {
+      this.user = user;
+    }
+    this.authService.getUserObservable().subscribe((user) => {
+      this.user = user;
+    });
   }
 
 }

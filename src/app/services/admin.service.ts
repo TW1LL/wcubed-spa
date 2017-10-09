@@ -3,32 +3,46 @@ import {API} from '../constants/index';
 import {rankTitle} from '../models';
 import {AuthService} from './auth.service';
 import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AdminService {
-    private permissions: boolean;
+  private permissions: boolean = null;
 
-    constructor(private http: Http, private authService: AuthService) {}
+  constructor(private http: Http, private authService: AuthService) {}
 
-    getPermissions(): Promise<any> {
-      return new Promise((resolve) => {
-        if (this.permissions != null) {
+  getPermissions(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.permissions != null) {
+        if (this.permissions) {
           resolve(this.permissions);
         } else {
-          return this.retrievePermissions().then(permissions => {
-            this.permissions = permissions;
-            resolve(permissions);
-          })
+          reject(this.permissions);
         }
-      })
-     }
 
-    retrievePermissions() {
-      return this.http.post(API.checkRank, {checkRank: rankTitle.Admin}, {headers: new Headers(this.headers)})
-        .toPromise().then(this.extractData);
-    }
+      } else {
+        this.retrievePermissions().then(permissions => {
+          console.log(permissions);
+          this.permissions = permissions.result;
+          if (this.permissions) {
+            resolve(this.permissions);
+          } else {
+            reject(this.permissions);
+          }
+        }).catch(() => {
+          reject(false);
+        });
+      }
+    })
+   }
 
-  private extractData = (res: Response): boolean => {
+  retrievePermissions() {
+    return this.http.post(API.checkRank, {checkRank: rankTitle.Admin}, {headers: new Headers(this.headers)})
+      .toPromise().then(this.extractData);
+  }
+
+  private extractData = (res: Response): any => {
     return res.json() || [];
   }
 
@@ -37,4 +51,30 @@ export class AdminService {
       {'Content-Type': 'application/json', 'token': this.authService.getToken()} :
       {'Content-Type': 'application/json'};
   }
+
+
+  update(type, body) {
+    let url = API[type];
+    if (url) {
+      return this.http.patch(url, body, {headers: new Headers(this.headers)}).toPromise().then(this.extractData);
+    }
+  }
+
+  create(type, body) {
+    let url = API[type];
+    if (url) {
+      return this.http.post(url, body, {headers: new Headers(this.headers)}).toPromise().then(this.extractData);
+    }
+  }
+
+  delete(type, id) {
+    let url = API[type] + '/' + id;
+    if (url) {
+      return this.http.delete(url, {headers: new Headers(this.headers)}).toPromise().then(this.extractData);
+    }
+  }
+
+
+
+
 }

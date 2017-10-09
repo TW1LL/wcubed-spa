@@ -19,10 +19,10 @@ import {AccountRegisterComponent} from '../account-register/account-register.com
       [outDuration]="300"
       [stopPropagation]="true"
     >
-      <mz-dropdown-item *ngIf="!isLoggedIn()"><a (click)="openRegister()">Register</a></mz-dropdown-item>
-      <mz-dropdown-item *ngIf="!isLoggedIn()"><a (click)="openLogin()">Login</a></mz-dropdown-item>
-      <mz-dropdown-item *ngIf="isLoggedIn()"><a routerLink="/user/account">Account</a></mz-dropdown-item>
-      <mz-dropdown-item *ngIf="isLoggedIn()"><a (click)="logout()">Logout</a></mz-dropdown-item>
+      <mz-dropdown-item *ngIf="!isLoggedIn"><a (click)="openRegister()">Register</a></mz-dropdown-item>
+      <mz-dropdown-item *ngIf="!isLoggedIn"><a (click)="openLogin()">Login</a></mz-dropdown-item>
+      <mz-dropdown-item *ngIf="isLoggedIn"><a routerLink="/user">Account</a></mz-dropdown-item>
+      <mz-dropdown-item *ngIf="isLoggedIn"><a (click)="logout()">Logout</a></mz-dropdown-item>
         
     </mz-dropdown>
     <mz-navbar-item><a id="btn-dropdown">{{navText}} <i mz-icon-mdi [align]="'right'" [icon]="'arrow-down-drop-circle-outline'"></i> </a></mz-navbar-item>
@@ -30,15 +30,32 @@ import {AccountRegisterComponent} from '../account-register/account-register.com
   styles: []
 })
 export class AccountDropdownComponent implements OnInit {
+  private isLoggedIn: boolean = false;
+  navText: string = 'User';
   constructor(private modalService: MzModalService, private authService: AuthService) {
   }
 
   ngOnInit() {
     $(document).on('click','nav #dropdown', function (e) {
       e.stopPropagation();
-    })
+    });
+    let user = this.authService.getUser();
+    if (user) {
+      this.updateUser(user);
+    }
+    this.authService.getUserObservable().subscribe((user) => {
+      this.updateUser(user);
+    });
   }
 
+  updateUser(user) {
+    this.isLoggedIn = !!user;
+    if (user) {
+      this.navText = user.email;
+    } else {
+      this.navText = 'User';
+    }
+  }
   openLogin() {
     this.modalService.open(AccountLoginComponent);
   }
@@ -51,13 +68,7 @@ export class AccountDropdownComponent implements OnInit {
     this.authService.logout();
   }
 
-  isLoggedIn() {
-    return this.authService.isLoggedIn();
-  }
 
-  get navText() {
-    return this.isLoggedIn() ? this.authService.getUser().email : 'User';
-  }
 
 
 }

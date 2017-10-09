@@ -4,6 +4,7 @@ import {Headers} from '@angular/http';
 import {User} from '../models';
 import {Http} from '@angular/http';
 import {API} from '../constants/index';
+import {Subject} from 'rxjs/Subject';
 
 
 @Injectable()
@@ -12,16 +13,20 @@ export class AuthService {
   registerUrl: string = API.userRegister;
   private user: User;
   private token: string;
+  private userObserve = new Subject<User>();
   constructor(private http: Http) {
-    this.token = localStorage.getItem('token');
+    const current = localStorage.getItem('current') ? JSON.parse(localStorage.getItem('current')) : false;
+    if (current && current.user) {
+      this.user = current.user;
+      this.token = current.token;
+    }
   }
 
   login(user: any) {
      return this.http.post(this.loginUrl, JSON.stringify(user), {headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
         const data = res.json();
         if (data.result) {
-          this.token = data.token;
-          this.user = data.user;
+          this.updateCurrent(data);
         }
         return data;
       });
@@ -31,8 +36,7 @@ export class AuthService {
     return this.http.post(this.registerUrl, JSON.stringify(user), {headers: new Headers({'Content-Type': 'application/json'})}).map((res) => {
       const data = res.json();
       if (data.result) {
-        this.token = data.token;
-        this.user = data.user;
+        this.updateCurrent(data);
       }
       return data;
     });
@@ -40,15 +44,21 @@ export class AuthService {
   logout() {
     this.user = null;
     this.token = null;
+    this.userObserve.next(null);
+    this.clearUser();
   }
   isLoggedIn() {
-    return this.user != null;
+
   }
 
   getUserPromise(){
     return new Promise((resolve, reject) => {
       resolve(this.user);
     });
+  }
+
+  getUserObservable() {
+    return this.userObserve.asObservable();
   }
 
   getUser() {
@@ -58,7 +68,17 @@ export class AuthService {
   getToken() {
     return this.token;
   }
-  updateUser(user: User) {
-    this.user = user;
+  saveResult(current) {
+    localStorage.setItem('current', JSON.stringify(current));
   }
+  clearUser() {
+    localStorage.setItem('current', '');
+  }
+  updateCurrent(current) {
+    this.userObserve.next(current.user);
+    this.user = current.user;
+    this.token = current.token;
+    this.saveResult(current);
+  }
+
 }

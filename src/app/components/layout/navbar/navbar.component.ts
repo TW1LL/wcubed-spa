@@ -14,7 +14,6 @@ import { Component, OnInit } from '@angular/core';
             <mz-navbar-item><a routerLink="/home">Home</a></mz-navbar-item>
             <mz-navbar-item><a routerLink="/product">Products</a></mz-navbar-item>
             <mz-navbar-item><a routerLink="/about">About</a></mz-navbar-item>
-            <mz-navbar-item><a routerLink="/news">News</a></mz-navbar-item>
             <mz-navbar-item><a routerLink="/contact">Contact</a></mz-navbar-item>
             <nav-account-dropdown></nav-account-dropdown>
             <nav-cart></nav-cart>
@@ -29,7 +28,6 @@ import { Component, OnInit } from '@angular/core';
       <mz-sidenav-link><a routerLink="/home">Home</a></mz-sidenav-link>
       <mz-sidenav-link><a routerLink="/product">Products</a></mz-sidenav-link>
       <mz-sidenav-link><a routerLink="/about">About</a></mz-sidenav-link>
-      <mz-sidenav-link><a routerLink="/news">News</a></mz-sidenav-link>
       <mz-sidenav-link><a routerLink="/contact">Contact</a></mz-sidenav-link>
       <nav-account-dropdown></nav-account-dropdown>
       <nav-cart></nav-cart>

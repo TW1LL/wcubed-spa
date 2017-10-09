@@ -47,6 +47,11 @@ import {appRoutes} from './app.routes';
 import {AdminResolve} from './services/resolves/admin.resolve';
 import {AdminService} from './services/admin.service';
 import {UserResolve} from './services/resolves/user.resolve';
+import { AdminHomeComponent } from './components/admin/admin-home/admin-home.component';
+import { AdminProductComponent } from './components/admin/admin-product/admin-product.component';
+import { AdminOrderComponent } from './components/admin/admin-order/admin-order.component';
+import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
+import { AdminPackageComponent } from './components/admin/admin-package/admin-package.component';
 
 
 
@@ -105,7 +110,12 @@ import {UserResolve} from './services/resolves/user.resolve';
     CheckoutCardComponent,
     CheckoutStripeComponent,
     AdminPageComponent,
-    AccountPageComponent
+    AccountPageComponent,
+    AdminHomeComponent,
+    AdminProductComponent,
+    AdminOrderComponent,
+    AdminCategoryComponent,
+    AdminPackageComponent
   ],
   entryComponents: [
     AccountLoginComponent,

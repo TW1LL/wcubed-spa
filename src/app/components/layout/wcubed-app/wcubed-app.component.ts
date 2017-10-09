@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LoadingService} from '../../../services/loading.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'wcubed-app',
@@ -20,7 +21,7 @@ import {LoadingService} from '../../../services/loading.service';
 export class WcubedAppComponent implements OnInit, OnDestroy {
   sub: any;
   loading: boolean = true;
-  constructor(private loadingService: LoadingService) { }
+  constructor(private loadingService: LoadingService, private authService: AuthService) { }
 
   ngOnInit() {
     this.subscribe();
