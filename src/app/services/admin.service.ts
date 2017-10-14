@@ -13,37 +13,30 @@ export class AdminService {
   constructor(private http: Http, private authService: AuthService) {}
 
   getPermissions(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.permissions != null) {
-        if (this.permissions) {
-          resolve(this.permissions);
-        } else {
-          reject(this.permissions);
-        }
 
-      } else {
-        this.retrievePermissions().then(permissions => {
-          console.log(permissions);
-          this.permissions = permissions.result;
-          if (this.permissions) {
-            resolve(this.permissions);
-          } else {
-            reject(this.permissions);
-          }
-        }).catch(() => {
-          reject(false);
-        });
-      }
-    })
+    return new Promise((resolve, reject) => {
+      this.retrievePermissions().then(permissions => {
+
+        this.permissions = permissions.result ? permissions.result : false;
+        if (this.permissions) {
+
+          resolve();
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+      });
+    });
    }
 
   retrievePermissions() {
     return this.http.post(API.checkRank, {checkRank: rankTitle.Admin}, {headers: new Headers(this.headers)})
-      .toPromise().then(this.extractData);
+      .toPromise().then(this.extractData).catch(this.extractData);
   }
 
   private extractData = (res: Response): any => {
-    return res.json() || [];
+    return res.json() || false;
   }
 
   get headers() {

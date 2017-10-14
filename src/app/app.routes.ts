@@ -24,6 +24,7 @@ export const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'admin', component: AdminPageComponent, resolve: {page : AdminResolve}},
   { path: 'admin/:page', component: AdminPageComponent, resolve: {page: AdminResolve}},
+  { path: 'admin/:page/:id', component: AdminPageComponent, resolve: {page: AdminResolve}},
   { path: 'user', component: AccountPageComponent, resolve: {page: UserResolve}},
   { path: 'user/:page', component: AccountPageComponent, resolve: {page: UserResolve}},
 ];

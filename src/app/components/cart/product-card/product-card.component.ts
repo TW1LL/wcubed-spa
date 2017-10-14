@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Product} from '../../../models';
 import {OrderService} from '../../../services/order.service';
+import {AdminService} from '../../../services/admin.service';
 
 @Component({
   selector: 'product-card',
@@ -25,13 +26,14 @@ import {OrderService} from '../../../services/order.service';
               </button>
             </div>
             <div class="row">
-              <button mz-button class="col s6 blue-grey lighten-2" routerLink="/product/{{product.id}}">View more Info</button>
-              <button mz-button class="col s6 blue-grey darken-2" (click)="addToCart()">
+              <button mz-button [ngClass] = "isAdmin ? 's4' : 's6'" class="col blue-grey lighten-2" routerLink="/product/{{product.id}}">View more Info</button>
+              <button mz-button [ngClass] = "isAdmin ? 's4' : 's6'" class="col blue-grey darken-2" (click)="addToCart()">
                 <i mz-icon-mdi
                    [align]="'right'"
                    [icon]="'cart'"></i>
                 Add to Cart
               </button>
+              <button mz-button *ngIf="isAdmin" class="col s4 blue-grey lighten-1" routerLink="/admin/product/{{product.id}}">Edit</button>
             </div>
           </div>
         </div>
@@ -61,10 +63,14 @@ import {OrderService} from '../../../services/order.service';
     }`
   ],
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnInit {
   @Input() product: Product;
+  isAdmin: boolean;
+  constructor(private orderService: OrderService, private adminService: AdminService) {}
 
-  constructor(private orderService: OrderService) {}
+  ngOnInit() {
+    this.adminService.getPermissions().then(() => this.isAdmin = true).catch(() => this.isAdmin = false);;
+  }
 
   addToCart() {
     this.orderService.addToCart(this.product);

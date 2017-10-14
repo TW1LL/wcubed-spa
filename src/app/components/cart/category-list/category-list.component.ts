@@ -18,6 +18,7 @@ import {fadeInAnimation} from '../../../pipes/animations';
   styles: []
 })
 export class CategoryListComponent implements OnInit {
+  @Input()
   categories: Category[];
   sub: any;
   @Input() count: number;
@@ -27,7 +28,9 @@ export class CategoryListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCategories();
+    if (!this.categories) {
+      this.getCategories();
+    }
   }
   getCategories() {
       this.categories = this.route.snapshot.data['categories'];

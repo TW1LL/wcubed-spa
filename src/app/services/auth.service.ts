@@ -48,12 +48,15 @@ export class AuthService {
     this.clearUser();
   }
   isLoggedIn() {
-
+    return !!this.user;
   }
 
   getUserPromise(){
     return new Promise((resolve, reject) => {
-      resolve(this.user);
+      if (this.user) {
+        resolve(this.user);
+      }
+        reject();
     });
   }
 

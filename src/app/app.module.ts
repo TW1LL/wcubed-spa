@@ -52,6 +52,8 @@ import { AdminProductComponent } from './components/admin/admin-product/admin-pr
 import { AdminOrderComponent } from './components/admin/admin-order/admin-order.component';
 import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
 import { AdminPackageComponent } from './components/admin/admin-package/admin-package.component';
+import { AdminProductDetailsComponent } from './components/admin/admin-product-details/admin-product-details.component';
+import { AdminCategoryDetailsComponent } from './components/admin/admin-category-details/admin-category-details.component';
 
 
 
@@ -115,7 +117,9 @@ import { AdminPackageComponent } from './components/admin/admin-package/admin-pa
     AdminProductComponent,
     AdminOrderComponent,
     AdminCategoryComponent,
-    AdminPackageComponent
+    AdminPackageComponent,
+    AdminProductDetailsComponent,
+    AdminCategoryDetailsComponent
   ],
   entryComponents: [
     AccountLoginComponent,

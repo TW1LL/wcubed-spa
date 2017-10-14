@@ -17,14 +17,16 @@ import {fadeInAnimation} from '../../../pipes/animations';
   styles: ['']
 })
 export class ProductListComponent implements OnInit {
+  @Input()
   products: Product[];
   @Input() count: number;
   @Input() category: Category;
-  errorMessage: string;
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.getProducts();
+    if (!this.products) {
+      this.getProducts();
+    }
   }
 
   getProducts() {

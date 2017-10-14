@@ -14,24 +14,39 @@ import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class CategoryService {
-  private url = API.category;  // URL to web API
-  private categories: Category[] | ErrorObservable;
+  private url = API.category;
+  private categories: Category[];
   constructor (private http: Http) {
   }
 
-  public getCategories(): Promise<Category[]|ErrorObservable> {
+  public getCategories(): Promise<Category[]> {
       return new Promise((resolve) => {
         if(this.categories != null) {
           return resolve(this.categories);
         } else {
-          return this.retreiveCategories().then((categories) => {console.log(categories);this.categories = categories; resolve(categories) })
+          return this.retrieveCategories().then((categories: Category[]) => {
+          this.categories = categories;
+          resolve(categories);
+          })
         }
       })
 
   }
+  public getCategory(id: number = 0): Promise<Category> {
+    return new Promise((resolve) => {
+      if(this.categories) {
+        resolve(this.categories.find(cat => cat.id == id));
+      } else {
+        this.retrieveCategories().then((categories: Category[]) => {
+          console.log(categories);
+          this.categories = categories;
+          resolve(this.categories.find(cat => cat.id == id)) })
+      }
+    })
 
+  }
 
-  private retreiveCategories() {
+  private retrieveCategories() {
     return this.http.get(this.url)
       .toPromise()
       .then(this.extractData)

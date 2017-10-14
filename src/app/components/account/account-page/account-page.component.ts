@@ -3,11 +3,11 @@ import {User} from "../../../models";
 import {OrderService} from "../../../services/order.service";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from '../../../services/auth.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-account-page',
   template: `
-    <div class="container">
         <div class="row">
             <div class="col m8 s12 right">
   
@@ -50,7 +50,6 @@ import {AuthService} from '../../../services/auth.service';
             </div>
           
         </div>
-    </div>
   `,
   styles: []
 })
@@ -60,17 +59,18 @@ export class AccountPageComponent implements OnInit {
   user: User;
 
 
-  constructor(private route: ActivatedRoute, private orderService: OrderService, private authService: AuthService) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService, private location: Location) { }
 
   ngOnInit() {
-    this.page = this.route.snapshot.data['page'].subscribe(page => this.page = page);
-    let user = this.authService.getUser();
-    console.log(user);
-    if (user) {
-      this.user = user;
-    }
+    this.route.params.subscribe((params) => {
+      this.page = params['page'];
+    })
+    this.user = this.authService.getUser();
     this.authService.getUserObservable().subscribe((user) => {
       this.user = user;
+      if (!this.user) {
+        this.location.back();
+      }
     });
   }
 

@@ -24,9 +24,8 @@ export class ProductService {
       if(this.products) {
         return resolve(this.filter(category));
       } else {
-        this.retrieveProducts().then((product) => {
-          this.products = product;
-
+        this.retrieveProducts().then((products) => {
+          this.products = products;
           resolve(this.filter(category))
         })
       }
@@ -37,22 +36,18 @@ export class ProductService {
   public getProduct(id: number = 0): Promise<Product> {
     return new Promise((resolve) => {
       if (this.products) {
-        return resolve(this.products.find(product => product.id === id))
+        resolve(this.products.find(product => product.id == id))
       } else {
-        this.retrieveProducts().then((product) => {
-          this.products = product;
-
-          resolve(this.products.find(product => product.id === id))
+        this.retrieveProducts().then((products) => {
+          this.products = products;
+          resolve(this.products.find(product => product.id == id));
         })
       }
     })
   }
 
   private filter(category: string) {
-    if (category != null) {
-      return this.products.filter(product => product.category.id ===  +category);
-    }
-    return this.products;
+    return category ? this.products.filter(product => product.category.id ===  +category) : this.products;
   }
 
   private retrieveProducts(): Promise<Product[]> {
@@ -63,7 +58,14 @@ export class ProductService {
   }
 
   private extractData = (res: Response): Product[] => {
-     return res.json() || [];
+    const json: Product[] = res.json() || [];
+    if (json.length > 0) {
+      return json.map(prod => {
+        prod.images = JSON.parse(prod.images);
+        return prod;
+      });
+    }
+    return json;
   }
 
   private handleError (error: Response | any) {
