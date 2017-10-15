@@ -10,25 +10,36 @@ import {Observable} from 'rxjs/Observable';
 export class AdminService {
   private permissions: boolean = null;
 
-  constructor(private http: Http, private authService: AuthService) {}
+  constructor(private http: Http, private authService: AuthService) {
+    this.authService.getUserObservable().subscribe(user => {
+      this.getPermissions(true).catch();
+    })
 
-  getPermissions(): Promise<any> {
+  }
 
+  getPermissions(ignoreCache: boolean = false): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.retrievePermissions().then(permissions => {
-
-        this.permissions = permissions.result ? permissions.result : false;
+      if (!ignoreCache && this.permissions != null) {
         if (this.permissions) {
-
-          resolve();
+          resolve(this.permissions);
         } else {
-          reject();
+          reject(this.permissions);
         }
-      }).catch(() => {
-        reject();
-      });
-    });
-   }
+
+      } else {
+        this.retrievePermissions().then(permissions => {
+          this.permissions = permissions.result;
+          if (this.permissions) {
+            resolve(this.permissions);
+          } else {
+            reject(this.permissions);
+          }
+        }).catch(() => {
+          reject(false);
+        });
+      }
+    })
+  }
 
   retrievePermissions() {
     return this.http.post(API.checkRank, {checkRank: rankTitle.Admin}, {headers: new Headers(this.headers)})

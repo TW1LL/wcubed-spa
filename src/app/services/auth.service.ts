@@ -78,10 +78,10 @@ export class AuthService {
     localStorage.setItem('current', '');
   }
   updateCurrent(current) {
-    this.userObserve.next(current.user);
     this.user = current.user;
     this.token = current.token;
     this.saveResult(current);
+    this.userObserve.next(current.user);
   }
 
 }
