@@ -6,7 +6,7 @@ import {Category} from '../../../models';
   template: `
     <mz-card>
       <mz-card-content>
-        <a routerLink="/product/cat/{{category.id}}">
+        <a routerLink="/admin/category/{{category.id}}">
           <div class="img-wrapper">
             <span class="card-title">{{category.name}}</span>
             <img src="assets/images/{{category.thumbnail}}" width="100%" />
@@ -15,7 +15,6 @@ import {Category} from '../../../models';
             {{category.description}}
           </p>
         </a>
-        <button mz-button class="blue-grey darken-2" *ngIf="isAdmin" routerLink="/admin/category/{{category.id}}">Edit</button>
       </mz-card-content>
     </mz-card>
   `,

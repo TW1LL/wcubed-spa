@@ -30,7 +30,7 @@ import {AccountRegisterComponent} from '../account-register/account-register.com
   styles: []
 })
 export class AccountDropdownComponent implements OnInit {
-  private isLoggedIn: boolean = false;
+  isLoggedIn: boolean = false;
   navText: string = 'User';
   constructor(private modalService: MzModalService, private authService: AuthService) {
   }

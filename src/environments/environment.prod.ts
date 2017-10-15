@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  host: 'https://wcubed.co'
+  host: 'http://wcubed.co:3000'
 };

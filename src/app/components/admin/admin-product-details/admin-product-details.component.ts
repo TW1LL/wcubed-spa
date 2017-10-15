@@ -25,10 +25,10 @@ import {Product} from '../../../models';
       <mz-card-content>
         <div class="row">
           <div class="col s3">
-            <img src="assets/images/{{product.thumbnail}}" style="width:100%" (click)="changeImage(product.thumbnail)">
+            <img src="assets/images/{{product.thumbnail}}" style="width:100%">
           </div>
           <div class="col s3" *ngFor="let image of product.images">
-            <img src="assets/images/{{image}}" style="width: 100%" (click)="changeImage(image)">
+            <img src="assets/images/{{image}}" style="width: 100%">
           </div>
         </div>
       </mz-card-content>

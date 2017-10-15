@@ -69,7 +69,7 @@ export class ProductDetailsComponent implements OnInit {
     this.currentImage = image;
   }
 
-  addToCart() {
-    this.orderService.addToCart(this.product);
+  addToCart(product: Product) {
+    this.orderService.addToCart(product);
   }
 }
