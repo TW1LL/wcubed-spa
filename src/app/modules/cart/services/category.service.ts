@@ -19,9 +19,9 @@ export class CategoryService {
   constructor (private http: Http) {
   }
 
-  public getCategories(): Promise<Category[]> {
+  public getCategories(ignoreCache = false): Promise<Category[]> {
       return new Promise((resolve) => {
-        if(this.categories != null) {
+        if(!ignoreCache && this.categories) {
           return resolve(this.categories);
         } else {
           return this.retrieveCategories().then((categories: Category[]) => {

@@ -42,6 +42,7 @@ import {NavCartComponent} from './components/nav-cart/nav-cart.component';
   ],
   exports: [
     ProductListComponent,
+    ProductCardComponent,
     CategoryListComponent,
     NavCartComponent,
     CartItemComponent

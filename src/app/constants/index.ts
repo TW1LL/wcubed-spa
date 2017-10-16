@@ -22,7 +22,8 @@ export const API = {
   shipmentCreate: environment.host + '/shipment/create',
   shipmentBuy: environment.host + '/shipment/buy',
   purchase: environment.host + '/payment/purchase',
-  checkRank: environment.host + '/user/check-rank'
+  checkRank: environment.host + '/user/check-rank',
+  packaging: environment.host + '/package'
 };
 
 export const OrderStatus = {

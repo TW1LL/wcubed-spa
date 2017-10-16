@@ -1,16 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Product, Category} from '../../../../models';
-import {ProductService} from '../../services/product.service';
+import {Product} from '../../../../models';
 import {ActivatedRoute} from '@angular/router';
 import {fadeInAnimation} from '../../../../pipes/animations';
 @Component({
   animations: [fadeInAnimation],
   host: { '[@fadeInAnimation]': '' },
-  selector: 'product-list',
+  selector: 'admin-product-list',
   template: `    
     <div class="row">
       <ng-container *ngFor="let product of products">
-        <div class="col s6 m4" *ngIf="!product.hidden">
+        <div class="col s6 m4">
          <product-card [product]="product"></product-card>
         </div>
       </ng-container>
@@ -18,11 +17,10 @@ import {fadeInAnimation} from '../../../../pipes/animations';
   `,
   styles: ['']
 })
-export class ProductListComponent implements OnInit {
+export class AdminProductListComponent implements OnInit {
   @Input()
   products: Product[];
   @Input() count: number;
-  @Input() category: Category;
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -34,9 +32,6 @@ export class ProductListComponent implements OnInit {
   getProducts() {
     this.products = this.route.snapshot.data['products'];
     if (this.products) {
-      if (this.category != null) {
-        this.products = this.products.filter(product => product.category == this.category);
-      }
       this.products = this.products.slice(0, this.count || this.products.length);
     }
 

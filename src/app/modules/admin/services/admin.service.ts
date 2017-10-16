@@ -5,12 +5,17 @@ import {UserService} from '../../account/services/user.service';
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import {ProductService} from '../../cart/services/product.service';
+import {CategoryService} from '../../cart/services/category.service';
 
 @Injectable()
 export class AdminService {
   private permissions: boolean = null;
 
-  constructor(private http: Http, private userService: UserService) {
+  constructor(private http: Http,
+              private userService: UserService,
+              private productService: ProductService,
+              private categoryService: CategoryService) {
     this.userService.getUserObservable().subscribe(user => {
       this.getPermissions(true).catch();
     })
@@ -46,7 +51,15 @@ export class AdminService {
       .toPromise().then(this.extractData).catch(this.extractData);
   }
 
-  private extractData = (res: Response): any => {
+  private extractData = (res: Response, type: string =null): any => {
+    switch(type) {
+      case 'product':
+        this.productService.getProducts(null, true);
+        break;
+      case 'category':
+        this.categoryService.getCategories(true);
+        break;
+    }
     return res.json() || false;
   }
 
@@ -60,7 +73,7 @@ export class AdminService {
   update(type, body) {
     let url = API[type];
     if (url) {
-      return this.http.patch(url, body, {headers: new Headers(this.headers)}).toPromise().then(this.extractData);
+      return this.http.patch(url, body, {headers: new Headers(this.headers)}).toPromise().then((res) =>this.extractData(res, type));
     }
   }
 

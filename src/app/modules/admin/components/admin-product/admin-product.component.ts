@@ -7,7 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'admin-product',
   template: `    
-      <product-list *ngIf="!product" [products]="products"></product-list>
+      <admin-product-list *ngIf="!product" [products]="products"></admin-product-list>
       <admin-product-details *ngIf="product" [product]="product"></admin-product-details>
   `,
   styles: []

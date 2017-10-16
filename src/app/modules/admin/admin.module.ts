@@ -14,8 +14,8 @@ import {MarkdownModule} from 'angular2-markdown';
 import {MaterializeModule} from 'ng2-materialize';
 import {CartModule} from '../cart/cart.module';
 import {RouterModule} from '@angular/router';
-import {appRoutes} from '../../app.routes';
-import {ProductListComponent} from '../cart/components/product-list/product-list.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {AdminProductListComponent} from './components/admin-product-list/product-list.component';
 
 @NgModule({
   imports: [
@@ -23,6 +23,7 @@ import {ProductListComponent} from '../cart/components/product-list/product-list
     MarkdownModule.forRoot(),
     MaterializeModule.forRoot(),
     RouterModule,
+    ReactiveFormsModule,
     CartModule,
 
   ],
@@ -40,6 +41,7 @@ import {ProductListComponent} from '../cart/components/product-list/product-list
     AdminPackageComponent,
     AdminProductDetailsComponent,
     AdminCategoryDetailsComponent,
+    AdminProductListComponent
   ]
 })
 export class AdminModule { }

@@ -6,22 +6,22 @@ import {Http, Response}          from '@angular/http';
 import {API} from '../../../constants';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-
 import 'rxjs/add/operator/toPromise';
-import {Category} from '../../../models';
+import {Package} from '../../../../../../wcubed-api/src/models';
 
 
 @Injectable()
 export class ProductService {
   private url = API.product;  // URL to web API
+  private packageUrl = API.packaging;
   private products: Product[];
+  private packaging: Package[];
   constructor (private http: Http) {
   }
 
-  public getProducts(category: string = null): Promise<Product[]> {
+  public getProducts(category: string = null, ignoreCache = false): Promise<Product[]> {
     return new Promise((resolve) => {
-      if(this.products) {
+      if(!ignoreCache && this.products) {
         return resolve(this.filter(category));
       } else {
         this.retrieveProducts().then((products) => {
@@ -46,6 +46,19 @@ export class ProductService {
     })
   }
 
+  public getPackaging(): Promise<Package[]> {
+    return new Promise((resolve) => {
+      if (this.packaging) {
+        resolve(this.packaging)
+      } else {
+        this.retrievePackaging().then((packaging) => {
+          this.packaging = packaging;
+          resolve(this.packaging);
+        })
+      }
+    })
+  }
+
   private filter(category: string) {
     return category ? this.products.filter(product => product.category.id ===  +category) : this.products;
   }
@@ -57,11 +70,20 @@ export class ProductService {
       .catch(this.handleError);
   }
 
+  private retrievePackaging(): Promise<Package[]> {
+    return this.http.get(this.packageUrl)
+      .toPromise()
+      .then((res) => res.json())
+      .catch(this.handleError)
+  }
+
   private extractData = (res: Response): Product[] => {
-    const json: Product[] = res.json() || [];
+    const json = res.json() || [];
     if (json.length > 0) {
       return json.map(prod => {
         prod.images = JSON.parse(prod.images);
+        prod.digital = prod.digital == 'true'
+        prod.hidden = prod.hidden == 'true'
         return prod;
       });
     }
