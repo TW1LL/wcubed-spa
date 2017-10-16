@@ -1,17 +1,17 @@
-import {OrderResolve} from './services/resolves/order.resolve';
-import {WcubedWizardComponent} from './components/checkout/wizard/wizard.component';
-import {ProductListResolve} from './services/resolves/product.resolve';
-import {WcubedHomeComponent} from './components/layout/wcubed-home/wcubed-home.component';
-import {ProductDetailsResolve} from './services/resolves/productdetails.resolve';
-import {ProductDetailsComponent} from './components/cart/product-details/product-details.component';
-import {ProductListComponent} from './components/cart/product-list/product-list.component';
-import {CategoryListResolve} from './services/resolves/category.resolve';
-import {CategoryListComponent} from './components/cart/category-list/category-list.component';
+import {OrderResolve} from './modules/checkout/resolves/order.resolve';
+import {WcubedWizardComponent} from './modules/checkout/components/wizard/wizard.component';
+import {ProductListResolve} from './modules/cart/resolves/product.resolve';
+import {WcubedHomeComponent} from './modules/framework/components/wcubed-home/wcubed-home.component';
+import {ProductDetailsResolve} from './modules/cart/resolves/productdetails.resolve';
+import {ProductDetailsComponent} from './modules/cart/components/product-details/product-details.component';
+import {ProductListComponent} from './modules/cart/components/product-list/product-list.component';
+import {CategoryListResolve} from './modules/cart/resolves/category.resolve';
+import {CategoryListComponent} from './modules/cart/components/category-list/category-list.component';
 import {Routes} from '@angular/router';
-import {AdminPageComponent} from './components/admin/admin-page/admin-page.component';
-import {AdminResolve} from './services/resolves/admin.resolve';
-import {UserResolve} from './services/resolves/user.resolve';
-import {AccountPageComponent} from './components/account/account-page/account-page.component';
+import {AdminPageComponent} from './modules/admin/components/admin-page/admin-page.component';
+import {AdminResolve} from './modules/admin/services/admin.resolve';
+import {UserResolve} from './modules/account/resolves/user.resolve';
+import {AccountPageComponent} from './modules/account/components/account-page/account-page.component';
 
 
 export const appRoutes: Routes = [
