@@ -20,7 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class CheckoutConfirmComponent implements OnInit {
   @Input() stepChange : EventEmitter<any>;
-  @Input() changeStep: EventEmitter<string>;
+  @Input() changeStep: EventEmitter<[boolean, string]>;
   @Output() paid: EventEmitter<number> = new EventEmitter();
   order: Order;
   constructor(private orderService: OrderService, private route: ActivatedRoute,) { }
@@ -37,7 +37,7 @@ export class CheckoutConfirmComponent implements OnInit {
   awaitPaid() {
     this.paid.subscribe((value) => {
       if (value) {
-        this.changeStep.emit('next');
+        this.changeStep.emit([true, 'next']);
       }
     })
   }

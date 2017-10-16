@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 import {OrderService} from '../services/order.service';
 import {LoadingService} from '../../framework/services/loading.service';
 import 'rxjs/add/operator/first';
@@ -7,7 +7,7 @@ import {Location} from '@angular/common';
 import {Order} from '../../../../../../wcubed-api/src/models/checkout/order';
 @Injectable()
 export class OrderResolve implements Resolve<Order> {
-  constructor(private location: Location, private orderService: OrderService, private loadingService: LoadingService) {
+  constructor(private router: Router, private orderService: OrderService, private loadingService: LoadingService) {
 
   }
   resolve(route: ActivatedRouteSnapshot) {
@@ -17,7 +17,7 @@ export class OrderResolve implements Resolve<Order> {
       if (order.items.length > 0) {
         return order;
       } else {
-        this.location.back();
+        this.router.navigate(['home']);
       }
     });
   }

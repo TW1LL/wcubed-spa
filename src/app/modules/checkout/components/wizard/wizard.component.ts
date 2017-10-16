@@ -31,8 +31,8 @@ import {OrderService} from '../../services/order.service';
             <mz-card>
               <mz-card-content>
                 <div class="row">
-                  <button mz-button class="col s6 blue-grey lighten-1" (click)="prevStep()" [disabled]="step == 0 || step == 3">Prev</button>
-                  <button mz-button class="col s6 blue-grey darken-2" (click)="nextStep()" [disabled]="step == 3">Next</button>
+                  <button mz-button class="col s6 blue-grey lighten-1" (click)="stepChange.emit([step, false, 'prev'])" [disabled]="step == 0 || step == 3">Prev</button>
+                  <button mz-button class="col s6 blue-grey darken-2" (click)="stepChange.emit([step, true, 'next'])" [disabled]="step == 3">Next</button>
                 </div>
               </mz-card-content>
             </mz-card>
@@ -44,8 +44,8 @@ import {OrderService} from '../../services/order.service';
   styles: []
 })
 export class WcubedWizardComponent implements OnInit {
-  @Output() stepChange: EventEmitter<number> = new EventEmitter();
-  @Output() changeStep: EventEmitter<string> = new EventEmitter();
+  @Output() stepChange: EventEmitter<[number, boolean, string]> = new EventEmitter();
+  @Output() changeStep: EventEmitter<[boolean, string]> = new EventEmitter();
   step: number = 0;
   order: Order;
   cart: OrderItem[];
@@ -69,32 +69,35 @@ export class WcubedWizardComponent implements OnInit {
     if (this.step === 0 || this.step === 3) {
       return false;
     }
-    this.stepChange.emit(this.step);
     this.step -= 1;
+    this.stepChange.emit([this.step, false, 'prev']);
     return true;
   }
   nextStep() {
     if (this.step == 3) {
       return false;
     }
-    this.stepChange.emit(this.step);
     this.step += 1;
+    this.stepChange.emit([this.step, false, 'next']);
     return true;
   }
   setStep(step) {
-    this.stepChange.emit(this.step);
     this.step = step;
+    this.stepChange.emit([this.step, false, 'prev']);
   }
 
   awaitStepChange() {
-    this.changeStep.subscribe((direction) => {
-      if (direction === 'next') {
-        this.nextStep();
-      } else {
-        this.prevStep();
+    this.changeStep.subscribe(([valid, direction]) => {
+      if (valid) {
+        if (direction === 'next') {
+          this.nextStep();
+        } else {
+          this.prevStep();
+        }
       }
-    })
+    });
   }
+
 
 
 }

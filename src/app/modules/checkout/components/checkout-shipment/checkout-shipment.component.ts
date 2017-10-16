@@ -44,8 +44,8 @@ import {OrderShipment} from '../../../../models';
   styles: []
 })
 export class CheckoutShipmentComponent implements OnInit {
-  @Input() stepChange : EventEmitter<any>;
-  @Input() changeStep: EventEmitter<string>;
+  @Input() stepChange : EventEmitter<[number, boolean, string]>;
+  @Input() changeStep: EventEmitter<[boolean, string]>;
   shipments: any;
   selectedRates: any;
   constructor(private orderService: OrderService, private currencyPipe: CurrencyPipe) { }
@@ -54,13 +54,19 @@ export class CheckoutShipmentComponent implements OnInit {
   ngOnInit() {
     this.orderService.getRates().subscribe(shipments => {
       this.shipments = shipments;
-      for (var i in this.shipments) {
+      for (let i in this.shipments) {
           this.shipments[i].selectedRate = null;
       }
     });
-    this.stepChange.subscribe((step) => {
-      if (step == 1) {
-        this.saveRates();
+    this.stepChange.subscribe(([step, validate, direction]) => {
+      if (validate && step == 1 ) {
+        const valid = this.validation();
+        if (valid) {
+          this.saveRates();
+        }
+        this.changeStep.emit([valid, direction]);
+      } else if (step == 0) {
+        this.changeStep.emit([true, direction]);
       }
     });
   }
@@ -91,5 +97,11 @@ export class CheckoutShipmentComponent implements OnInit {
     this.orderService.saveRates(orderShipments);
 
 
+  }
+
+  validation() {
+    let valid = true;
+    this.shipments.forEach((shipment) => valid = !!shipment.selectedRate);
+    return valid;
   }
 }

@@ -40,15 +40,23 @@ import {UserService} from '../../../account/services/user.service';
 })
 export class CheckoutAddressComponent implements OnInit {
   address: Address = new Address();
-  @Input() stepChange : EventEmitter<any>;
-  @Input() changeStep: EventEmitter<string> = new EventEmitter();
+  @Input() stepChange : EventEmitter<[number, boolean, string]>;
+  @Input() changeStep: EventEmitter<[boolean, number]> = new EventEmitter();
   constructor(private orderService: OrderService, private userService: UserService) { }
 
   ngOnInit() {
-    this.stepChange.subscribe((step) => {
-      if(step == 0) {
-        this.address.country = "US";
-        this.orderService.addAddress(this.address)
+    this.createAddressObj();
+
+    this.stepChange.subscribe(([step, validate, direction]) => {
+      if (validate && step == 0 ) {
+        const valid = this.validation();
+        if (valid) {
+          this.address.country = "US";
+          this.orderService.addAddress(this.address);
+        }
+        this.changeStep.emit([valid, direction]);
+      } else if (step == 0) {
+        this.changeStep.emit([true, direction]);
       }
     });
 
@@ -56,6 +64,21 @@ export class CheckoutAddressComponent implements OnInit {
 
   isLoggedIn() {
     return this.userService.isLoggedIn();
+  }
+
+  createAddressObj() {
+    this.address.name = '';
+    this.address.email = '';
+    this.address.street1 = '';
+    this.address.street2 = '';
+    this.address.city = '';
+    this.address.state = '';
+    this.address.zip = '';
+
+  }
+  validation() {
+    return !(!this.address.name && !this.address.email && !this.address.street1 && !this.address.street2 && !this.address.city && !this.address.state && !this.address.zip);
+
   }
 
 }
