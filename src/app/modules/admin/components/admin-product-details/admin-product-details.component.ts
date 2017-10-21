@@ -48,13 +48,30 @@ import {Router} from '@angular/router';
               <div class="row">
                 <mz-input-container class="col s8">
                   <select required mz-select id="select-category" [label]="'Thumbnail'" formControlName="thumbnail">
-                    <option *ngFor="let image of product.images" [ngValue]="image">{{image}}</option>
+                    <option *ngFor="let image of productForm.value.images" [ngValue]="image">{{image}}</option>
                   </select>
                 </mz-input-container>
                 <img src="assets/images/{{productForm.value.thumbnail}}" width="100%" class="col s4" />
-
+                
+              </div>
+              <div class="row">
+                <div class="col s4" *ngFor="let image of productForm.value.images">
+                  <img src="assets/images/{{image}}" width="100%"/>
+                  <button (click)="deleteImage(image)" mz-button>Remove</button>
+                </div>
+              </div>
+              <div>
+                <mz-input-container class="col s12">
+                  <input mz-input
+                         id="input-upload"
+                         type="file"
+                         (change)="updateUploadImage($event)"
+                         >
+                </mz-input-container>
+                <button (click)="addImage()">Add Image</button>
               </div>
             </div>
+
             <div class="col s6 m4">
               <div class="row">
                 <mz-checkbox-container class="col s6">
@@ -136,6 +153,7 @@ export class AdminProductDetailsComponent implements OnInit {
     }
 
   }
+  image: File;
   constructor(private productService: ProductService,
               private adminService: AdminService,
               private categoryService: CategoryService,
@@ -162,18 +180,33 @@ export class AdminProductDetailsComponent implements OnInit {
       digital: [this.product.digital],
       onHand:[this.product.onHand, Validators.compose([Validators.required, Validators.min(0)])],
       hidden:[this.product.hidden],
-      thumbnail:[this.product.thumbnail, Validators.required]
+      thumbnail:[this.product.thumbnail, Validators.required],
+      images: [this.product.images]
     })
   }
 
   onSubmit() {
-    const formModel = this.productForm.value;
-
-    const copy = Object.assign(this.product, formModel);
+    const copy = Object.assign(this.product, this.productForm.value);
     copy.images = JSON.stringify(copy.images);
     this.adminService.update('product', copy).then(() => {
       this.router.navigate(['admin/product'])
     })
+  }
+
+  deleteImage(image: string) {
+      (this.product.images as any).splice(this.product.images.indexOf(image), 1);
+  }
+
+  addImage() {
+    this.adminService.upload('products', this.image).then(() => {
+      const images = this.productForm.value.images;
+      images.push('products/'+this.image.name);
+      this.productForm.patchValue({images: images });
+    })
+  }
+
+  updateUploadImage(event) {
+    this.image = event.srcElement.files[0];
   }
 
 }

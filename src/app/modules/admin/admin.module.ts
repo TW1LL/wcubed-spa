@@ -16,7 +16,6 @@ import {CartModule} from '../cart/cart.module';
 import {RouterModule} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AdminProductListComponent} from './components/admin-product-list/product-list.component';
-
 @NgModule({
   imports: [
     CommonModule,

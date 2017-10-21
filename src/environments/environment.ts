@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  host: 'http://wcubed.co:3000'
+  host: 'http://api.wcubed.co',
+  imageDir: '../wcubed-spa/src/assets/images'
 };

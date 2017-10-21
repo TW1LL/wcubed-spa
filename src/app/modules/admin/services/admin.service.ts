@@ -91,6 +91,16 @@ export class AdminService {
     }
   }
 
+  upload(type, file) {
+    let url = API['upload'] + '/' + type;
+    if (url) {
+      const formData = new FormData();
+      formData.append('image', file);
+      return this.http.post(url, formData, {headers: new Headers({'token': this.userService.getToken()})}).toPromise().then(this.extractData)
+    }
+
+  }
+
 
 
 

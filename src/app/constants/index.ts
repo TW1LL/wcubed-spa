@@ -1,15 +1,5 @@
-import * as testEnvironment from '../../environments/environment';
-import * as prodEnvironment from '../../environments/environment.prod';
-import { isDevMode } from '@angular/core';
+import {environment} from '../../environments/environment';
 
-let environment;
-
-if ( isDevMode() ) {
-  environment = testEnvironment.environment;
-}
-else {
-  environment = prodEnvironment.environment;
-}
 
 export const API = {
   product: environment.host + '/product',
@@ -23,7 +13,8 @@ export const API = {
   shipmentBuy: environment.host + '/shipment/buy',
   purchase: environment.host + '/payment/purchase',
   checkRank: environment.host + '/user/check-rank',
-  packaging: environment.host + '/package'
+  packaging: environment.host + '/package',
+  upload: environment.host + '/upload'
 };
 
 export const OrderStatus = {
