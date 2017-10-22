@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import {Package} from '../../../../../../wcubed-api/src/models';
+import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 
 
 @Injectable()
@@ -24,10 +25,10 @@ export class ProductService {
       if(!ignoreCache && this.products) {
         return resolve(this.filter(category));
       } else {
-        this.retrieveProducts().then((products) => {
+        this.retrieveProducts().then((products: Product[]) => {
           this.products = products;
           resolve(this.filter(category))
-        })
+        }).catch();
       }
 
     })
@@ -38,10 +39,10 @@ export class ProductService {
       if (this.products) {
         resolve(this.products.find(product => product.id == id))
       } else {
-        this.retrieveProducts().then((products) => {
+        this.retrieveProducts().then((products: Product[]) => {
           this.products = products;
           resolve(this.products.find(product => product.id == id));
-        })
+        }).catch();
       }
     })
   }
@@ -59,11 +60,20 @@ export class ProductService {
     })
   }
 
+  public updateProductQuantity(product: Product, diff: number) {
+    this.products = this.products.map((prod) => {
+      if (prod.id === product.id) {
+        prod.onHand = prod.onHand - diff;
+      }
+      return prod;
+    })
+  }
+
   private filter(category: string) {
     return category ? this.products.filter(product => product.category.id ===  +category) : this.products;
   }
 
-  private retrieveProducts(): Promise<Product[]> {
+  private retrieveProducts(): Promise<Product[] | ErrorObservable> {
     return this.http.get(this.url)
       .toPromise()
       .then(this.extractData)

@@ -5,6 +5,7 @@ import {API} from '../../../constants/index';
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {isEquivalent} from '../../../pipes/utils';
+import {ProductService} from '../../cart/services/product.service';
 @Injectable()
 export class OrderService {
   createUrl = API.orderCreate;
@@ -16,7 +17,7 @@ export class OrderService {
   private order: Order = new Order();
   private rates: any;
   status: any;
-  constructor(private userService: UserService, private http: Http) {
+  constructor(private userService: UserService, private http: Http, private productService: ProductService) {
     this.order.items = [];
     this.cartSub.next([]);
   }
@@ -174,12 +175,21 @@ export class OrderService {
     finalizeSub.next(this.status);
     return this.http.post(this.finalizeUrl, JSON.stringify({orderId: this.order.id}), {headers: new Headers(this.headers)}).toPromise().then((res) => {
       this.order = res.json();
+      this.updateProducts();
       return finalizeSub;
     })
   }
 
   get headers() {
     return  this.userService.isLoggedIn() ? {'Content-Type': 'application/json', 'token': this.userService.getToken()} : {'Content-Type': 'application/json'};
+  }
+
+  updateProducts() {
+    this.order.items.forEach((item) => {
+      this.productService.updateProductQuantity(item.product, item.quantity);
+    })
+
+
   }
 
 
