@@ -172,7 +172,7 @@ export class OrderService {
   finalizeOrder = (finalizeSub: Subject<string>) => {
     this.status = 'finalizing';
     finalizeSub.next(this.status);
-    return this.http.post(this.finalizeUrl, JSON.stringify({orderId: this.order.id}), {headers: new Headers(this.headers)}).toPromise().then((rest) => {
+    return this.http.post(this.finalizeUrl, JSON.stringify({orderId: this.order.id}), {headers: new Headers(this.headers)}).toPromise().then((res) => {
       this.order = res.json();
       return finalizeSub;
     })
