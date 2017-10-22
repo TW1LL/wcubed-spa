@@ -91,16 +91,40 @@ export class OrderService {
 
   }
 
-  getTotal() {
+  getTotal(beforeTax: boolean = false) {
     let total = 0;
     this.order.items.forEach((item) => {
-      total += +item.shipment.price;
+
+      if(item.shipment && item.shipment.price) {
+        total += +item.shipment.price;
+      }
       total += +item.product.price * item.quantity;
     });
-    if (this.order.address && (this.order.address.state === 'NJ' || this.order.address.state === 'New Jersey')) {
-      total += Math.round(total * 0.07 * 100) / 100;
+    if (this.hasTax && !beforeTax) {
+      total += this.getTax(total);
     }
 
+    return total;
+  }
+
+  get hasTax() {
+    return this.order.address && (this.order.address.state === 'NJ' || this.order.address.state === 'New Jersey')
+  }
+
+  getTax(total: number) {
+    return Math.round(total * 0.07 * 100) / 100;
+  }
+
+  getShippingTotal() : string | number {
+    let total = 0;
+    this.order.items.forEach((items) => {
+      if (items.shipment && items.shipment.price) {
+        total += items.shipment.price;
+      }
+    })
+    if (total === 0) {
+      return 'N/A';
+    }
     return total;
   }
 
