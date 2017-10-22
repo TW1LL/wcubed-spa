@@ -50,7 +50,7 @@ export class OrderService {
     this.order.payment.currency = 'usd';
   }
 
-  getOrderPromise() {
+  getOrderPromise(): Promise<Order> {
     return new Promise((resolve) => { resolve(this.order)});
   }
   getCart() {

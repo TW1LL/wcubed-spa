@@ -21,6 +21,10 @@ import {OrderStatus, OrderColor} from '../../../../constants/index';
           <div class="col s12 white-text">
             {{getStatus()}}
           </div>
+          <div *ngIf="confirmNumber">
+            <h3>Confirmation Number:</h3>
+            {{confirmNumber}}
+          </div>
         </div>
       </mz-card-content>
     </mz-card>
@@ -33,6 +37,7 @@ export class CheckoutFinalizedComponent implements OnInit {
   status: string;
   color = 'white';
   title = 'Finalizing Order...';
+  confirmNumber: string;
   constructor(private orderService: OrderService) { }
 
   ngOnInit() {
@@ -41,6 +46,7 @@ export class CheckoutFinalizedComponent implements OnInit {
         this.status = status;
         this.color = OrderColor[status];
         if (status == 'finalized') {
+          this.orderService.getOrderPromise().then((order) => this.confirmNumber = order.confirmNumber);
           this.title = 'Order Confirmed!';
         }
     });
