@@ -14,7 +14,8 @@ export const API = {
   purchase: environment.host + '/payment/purchase',
   checkRank: environment.host + '/user/check-rank',
   packaging: environment.host + '/package',
-  upload: environment.host + '/upload'
+  upload: environment.host + '/upload',
+  finalize: environment.host + '/order/finalize'
 };
 
 export const OrderStatus = {
@@ -24,6 +25,7 @@ export const OrderStatus = {
   'confirm': 'Card information valid and saved. Saving order.',
   'shipping' : 'Order saved. Creating shipping label and tracking number.',
   'paying' : 'Tracking number created. Charging card.',
+  'finalizing': 'Finalizing Order...',
   'finalized': 'Order confirmed. Confirmation number generated.'
 };
 
@@ -34,5 +36,6 @@ export const OrderColor = {
   'confirm': 'white',
   'shipping' : 'grey',
   'paying' : 'yellow',
+  'finalizing': 'yellow lighten-1',
   'finalized': 'green'
 };

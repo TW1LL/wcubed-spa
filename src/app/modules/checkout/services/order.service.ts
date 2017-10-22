@@ -11,6 +11,7 @@ export class OrderService {
   shipmentCreateUrl = API.shipmentCreate;
   shipmentBuyUrl = API.shipmentBuy;
   purchaseUrl = API.purchase;
+  finalizeUrl = API.finalize;
   private cartSub = new Subject<OrderItem[]>();
   private order: Order = new Order();
   private rates: any;
@@ -107,6 +108,7 @@ export class OrderService {
     this.saveOrder(finalizeSub)
       .then(this.purchaseOrder)
       .then(this.buyShipment)
+      .then(this.finalizeOrder)
       .then((sub) => {
         this.status = 'finalized';
         sub.next(this.status);
@@ -162,6 +164,15 @@ export class OrderService {
     this.status = 'paying';
     finalizeSub.next(this.status);
     return this.http.post(this.purchaseUrl, JSON.stringify({orderId: this.order.id}),{headers:new Headers(this.headers)}).toPromise().then((res) => {
+      this.order = res.json();
+      return finalizeSub;
+    })
+  }
+
+  finalizeOrder = (finalizeSub: Subject<string>) => {
+    this.status = 'finalizing';
+    finalizeSub.next(this.status);
+    return this.http.post(this.finalizeUrl, JSON.stringify({orderId: this.order.id}), {headers: new Headers(this.headers)}).toPromise().then((rest) => {
       this.order = res.json();
       return finalizeSub;
     })
