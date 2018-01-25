@@ -25,13 +25,13 @@ import {MzDropdownComponent} from 'ng2-materialize';
         </div>
       </mz-dropdown-item>
     </mz-dropdown>
-    
-    <mz-navbar-item>
+
+    <div class="right">
       <a id="cart-dropdown-link">
         <i mz-icon-mdi [icon]="'cart'" [align]="'left'" [size]="'36px'"></i>
         ( {{count}} )
       </a>
-    </mz-navbar-item>
+    </div>
   `,
   styles: [`.checkout {
     padding:15px;

@@ -59,7 +59,6 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit() {
     this.product = this.route.snapshot.data['product'];
     this.currentImage = this.product.thumbnail;
-    this.product.images = JSON.parse(this.product.images);
   }
 
   changeImage(image: string) {

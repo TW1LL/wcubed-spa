@@ -24,7 +24,7 @@ import { Component, OnInit } from '@angular/core';
       </div>
       <div class="footer-copyright">
         <div class="container">
-          © 2017 Copyright wcubed
+          © 2018 Copyright wcubed LLC
           <a class="grey-text text-lighten-4 right" routerLink="/admin">Admin</a>
         </div>
       </div>

@@ -7,14 +7,15 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'admin-product',
   template: `    
-      <admin-product-list *ngIf="!product" [products]="products"></admin-product-list>
-      <admin-product-details *ngIf="product" [product]="product"></admin-product-details>
+      <admin-product-list *ngIf="!product && !newProduct" [products]="products"></admin-product-list>
+      <admin-product-details *ngIf="product || newProduct" [product]="product"></admin-product-details>
   `,
   styles: []
 })
 export class AdminProductComponent implements OnInit {
   product: Product;
   products: Product[];
+  newProduct = false;
   constructor(private route: ActivatedRoute, private productService: ProductService) {
 
   }
@@ -22,9 +23,14 @@ export class AdminProductComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params['id']) {
-        this.productService.getProduct(params['id']).then(product => {
-          this.product = product;
-        });
+        if (params['id'] == 0) {
+          this.newProduct = true;
+          this.product = new Product();
+        } else {
+          this.productService.getProduct(params['id']).then(product => {
+            this.product = product;
+          });
+        }
       } else {
         this.product = null;
         this.productService.getProducts().then(products => this.products = products);

@@ -84,6 +84,16 @@ navbar nav {
 nav-cart .collection {
   margin: 0;
 }
+nav-cart div.right, nav-account-dropdown div.right {
+  list-style-image: none;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: background-color .3s;
+}
+
+nav-cart div.right:hover, nav-account-dropdown div.right:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 nav-cart .collection-item, nav-cart ul  {
     width: 350px;

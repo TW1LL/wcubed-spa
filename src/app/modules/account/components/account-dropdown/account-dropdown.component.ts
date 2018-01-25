@@ -25,7 +25,7 @@ import {AccountRegisterComponent} from '../account-register/account-register.com
       <mz-dropdown-item *ngIf="isLoggedIn"><a (click)="logout()">Logout</a></mz-dropdown-item>
         
     </mz-dropdown>
-    <mz-navbar-item><a id="btn-dropdown">{{navText}} <i mz-icon-mdi [align]="'right'" [icon]="'arrow-down-drop-circle-outline'"></i> </a></mz-navbar-item>
+    <div class="right" ><a id="btn-dropdown">{{navText}} <i mz-icon-mdi [align]="'right'" [icon]="'arrow-down-drop-circle-outline'"></i> </a></div>
   `,
   styles: []
 })

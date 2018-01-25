@@ -9,7 +9,7 @@ import {fadeInAnimation} from '../../../../pipes/animations';
   template: `
     <mz-parallax [height]="900">
       <div class="container parallax-section">
-        <h1>w3</h1>
+        <h1 style="background-image: url(assets/wcubed.png); height: 300px; margin-top: 0; background-position: center center; background-repeat: no-repeat;">&nbsp;</h1>
       </div>
       <div class="section white">
         <div class="row container">
